@@ -19,7 +19,7 @@ header {
     justify-content: center;
     align-items: center;
     height: 100px;
-    background: #CCE9E4;
+    background: #0179fa;
     margin-bottom: 10px;
     box-shadow: 5px 5px 5px rgb(85, 84, 84);
     color: #fff;
@@ -35,7 +35,7 @@ main {
     width: 100px;
     height: 5000;
     padding: 15px;
-    background:  #CCE9E4;
+    background:  #0179fa;
     color: #fff;
     text-align: center;
     display: flex;

@@ -1,15 +1,30 @@
 <?php 
 require_once '../../Config/config.php' ;
 require_once '../../Controller/productController.php' ;
+require_once '../../Controller/orderController.php' ;
 include_once '../../Layout/Admin/header.php';
 $action = $_GET['action'] ?? 'home';
 $controllerProduct = new ProductController($conn);
-
+$controllerOrder = new OrderController($conn);
 
 switch ($action) {
 
-//order
+    //order
+    case 'orders':
+        $controllerOrder->listOrder();
+        break;
 
+    // case 'createProduct':
+    //     $controllerOrder->createOrder();
+    //     break;
+
+    // case 'edit-product':
+    //     $controllerOrder->updateOrder();
+    //     break;
+
+    // case 'delete-product':
+    //     $controllerOrder->detailOrder();
+    //     break;
 
 
     
