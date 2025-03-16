@@ -22,8 +22,27 @@ class OrderModel {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function createOrderModel() {
+    public function createOrderModel($id_user, $id_productsize, $name, $address, $phone, $status, $create_at) {
+        $sql = 'INSERT INTO orders (id_user, id_productsize, name, address, phone, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('iisssss', $id_user, $id_productsize, $name, $address, $phone, $status, $create_at);
+        return $stmt->execute();
+    }
 
+    public function getUsers() {
+        $sql = 'SELECT id, name FROM users';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getProductSizes() {
+        $sql = 'SELECT id, id_product, id_size, price FROM product_sizes';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
 

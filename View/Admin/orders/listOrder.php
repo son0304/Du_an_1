@@ -46,7 +46,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <a href="dashboard.php?action=createProduct" class="btn btn-primary">Thêm sản phẩm</a>
+        <a href="dashboard.php?action=createOrder" class="btn btn-primary">Tạo mới đơn hàng</a>
     </div>    
 </body>
 </html>

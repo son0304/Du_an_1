@@ -14,9 +14,9 @@ switch ($action) {
         $controllerOrder->listOrder();
         break;
 
-    // case 'createProduct':
-    //     $controllerOrder->createOrder();
-    //     break;
+    case 'createOrder':
+        $controllerOrder->createOrder();
+        break;
 
     // case 'edit-product':
     //     $controllerOrder->updateOrder();

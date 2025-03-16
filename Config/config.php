@@ -15,4 +15,8 @@ if ($conn) {
     echo "Kết nối thât bại";
 }
 
+define('STATUS_UNCOMFIRMED', 'Chờ xác nhận');
+define('STATUS_CONFIRMED', 'Đã xác nhận');
+define('STATUS_SHIPPED', 'Đã giao');
+define('STATUS_CANCELLED', 'Đã hủy');
 ?>
