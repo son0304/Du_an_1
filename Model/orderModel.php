@@ -44,5 +44,29 @@ class OrderModel {
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function getOrderById($id) {
+        $sql = 'SELECT * FROM orders WHERE id = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+    
+    public function updateOrderModel($id, $id_productsize, $name, $address, $phone, $status) {
+        $sql = 'UPDATE orders SET id_productsize=?, name=?, address=?, phone=?, status=? WHERE id=?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('issssi', $id_productsize, $name, $address, $phone, $status, $id);
+        return $stmt->execute();
+    }
+    
+    public function deleteOrderModel($id) {
+        $sql = 'DELETE FROM orders WHERE id = ?';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        return $stmt->execute();
+    }
+    
 }
 

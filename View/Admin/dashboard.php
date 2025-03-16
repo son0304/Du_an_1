@@ -18,13 +18,13 @@ switch ($action) {
         $controllerOrder->createOrder();
         break;
 
-    // case 'edit-product':
-    //     $controllerOrder->updateOrder();
-    //     break;
+    case 'updateOrder':
+        $controllerOrder->updateOrder();
+        break;
 
-    // case 'delete-product':
-    //     $controllerOrder->detailOrder();
-    //     break;
+    case 'deleteOrder':
+        $controllerOrder->deleteOrder();
+        break;
 
 
     
