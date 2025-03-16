@@ -14,7 +14,7 @@
         <h1>Galaxy Shop</h1>
     </header>
     <main>
-        <article class="sidebar">
+    <article class="sidebar">
             <div>
                 <ul>
                     <div class="dashboard">
@@ -24,20 +24,29 @@
                 </ul>
                 <ul class="menu">
                     <li>
-                        <i class="fa-solid fa-house"></i>
-                        <a href="dashboard.php?action=index">Home</a>
+                        <a href="dashboard.php?action=index">
+                            <i class="fa-solid fa-house"></i> Home
+                        </a>
                     </li>
                     <li>
-                        <i class="fa-solid fa-users"></i>
-                        <a href="dashboard.php?action=users">Users</a>
+                        <a href="dashboard.php?action=users">
+                            <i class="fa-solid fa-users"></i> Users
+                        </a>
+                    </li>
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="fa-solid fa-list"></i> Products
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="dashboard.php?action=product_list">List</a></li>
+                            <li><a href="dashboard.php?action=product_categories">Categories</a></li>
+                            <li><a href="dashboard.php?action=product_size">Size</a></li>
+                        </ul>
                     </li>
                     <li>
-                        <i class="fa-solid fa-diagram-project"></i>
-                        <a href="dashboard.php?action=product">Products</a>
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-gears"></i>
-                        <a href="dashboard.php?action=settings">Setting</a>
+                        <a href="dashboard.php?action=settings">
+                            <i class="fa-solid fa-gears"></i> Setting
+                        </a>
                     </li>
                 </ul>
             </div>
