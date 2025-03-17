@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
     <?php 
     require_once '../../Config/config.php' ;
     require_once '../../Controller/productController.php' ;
@@ -10,25 +10,16 @@
 
 
 
-require_once '../../Config/config.php' ;
-require_once '../../Controller/productController.php' ;
-require_once '../../Controller/orderController.php' ;
-include_once '../../Layout/Admin/header.php';
-$action = $_GET['action'] ?? 'home';
-$controllerProduct = new ProductController($conn);
-$controllerOrder = new OrderController($conn);
 
 
     switch ($action) {
 
     //order
 
-=======
+
     case 'orders':
         $controllerOrder->listOrder();
         break;
->>>>>>> 468989beb31764839225fe4c28cbe33d48101bb8
-
     case 'createOrder':
         $controllerOrder->createOrder();
         break;
