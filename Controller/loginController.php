@@ -10,7 +10,7 @@ class LoginController {
     }
 
     public function form(){
-        include_once __DIR__ . '/../View/login.php';
+        include_once __DIR__ . '/../View/CLient/login.php';
     }
 
     public function login() {
