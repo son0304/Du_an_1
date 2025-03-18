@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Model/LoginModel.php';
+require_once __DIR__ . '/../Model/loginModel.php';
 
 class LoginController {
     private $loginModel;
@@ -10,7 +10,7 @@ class LoginController {
     }
 
     public function form(){
-        include_once __DIR__ . '/../View/CLient/login.php';
+        include_once __DIR__ . '/../Auth/login.php';
     }
 
     public function login() {

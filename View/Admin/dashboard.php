@@ -3,10 +3,13 @@
     require_once '../../Config/config.php' ;
     require_once '../../Controller/productController.php' ;
     require_once '../../Controller/userController.php';
+    require_once '../../Controller/orderController.php';
+
     include_once '../../Layout/Admin/header.php';
     $action = $_GET['action'] ?? 'home';
     $controllerProduct = new ProductController($conn);
     $controllerUser = new UserController($conn);
+    $controllerOrder = new OrderController($conn);
 
 
 
@@ -15,8 +18,6 @@
     switch ($action) {
 
     //order
-
-
     case 'orders':
         $controllerOrder->listOrder();
         break;
