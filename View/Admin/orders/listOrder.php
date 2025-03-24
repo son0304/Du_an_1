@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['success_message'])) {
+    echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
+    unset($_SESSION['success_message']); // Xóa thông báo sau khi hiển thị
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +19,6 @@
         <table class="table table-bordered">
             <thead class="table">
                 <tr>
-                    <th>ID</th>
                     <th>Người tạo</th>
                     <th>Tên sản phẩm</th>
                     <th>Kích cỡ</th>
@@ -28,25 +34,24 @@
             <tbody>
                 <?php foreach ($order as $order): ?>
                     <tr>
-                        <td><?= $order['id'] ?></td>
                         <td><?= $order['user_name'] ?></td> 
                         <td><?= $order['pz_product'] ?></td>
                         <td><?= $order['pz_size'] ?></td>
-                        <td><?= $order['pz_price'] ?></td>
+                        <td><?= number_format($order['pz_price'], 0, ',', '.') ?> VND</td>
                         <td><?= $order['name']?></td>
                         <td><?= $order['address']?></td>
                         <td><?= $order['phone']?></td>
                         <td><?= $order['status']?></td>
                         <td><?= $order['created_at']?></td>
                         <td>
-                            <a href="dashboard.php?action=editOrder&id=<?= $order['id'] ?>" class="btn btn-warning btn-sm">Sửa</a>
+                            <a href="dashboard.php?action=updateOrder&id=<?= $order['id'] ?>" class="btn btn-warning btn-sm">Sửa</a>
                             <a href="dashboard.php?action=deleteOrder&id=<?= $order['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <a href="dashboard.php?action=createProduct" class="btn btn-primary">Thêm sản phẩm</a>
+        <a href="dashboard.php?action=createOrder" class="btn btn-primary">Tạo mới đơn hàng</a>
     </div>    
 </body>
 </html>

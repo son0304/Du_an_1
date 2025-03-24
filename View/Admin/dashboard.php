@@ -43,6 +43,7 @@
 
 
 
+
                         <?php
                         require_once '../../Config/config.php';
                         require_once '../../Controller/productController.php';
@@ -57,6 +58,19 @@
 
 
                         switch ($action) {
+                            //Usser
+                            case 'users':
+                                $controllerUser->listUser();
+                                break;
+                            case 'form-edit':
+                                $controllerUser->formEdit($_GET['id']);
+                                break;
+                            case 'editUser':
+                                $controllerUser->editUser();
+                                break;
+                            case 'deleteUser':
+                                $controllerUser->deleteUser();
+                                break;
 
                             //order
                             case 'orders':
