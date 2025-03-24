@@ -20,3 +20,18 @@ define('STATUS_CONFIRMED', 'Đã xác nhận');
 define('STATUS_SHIPPED', 'Đã giao');
 define('STATUS_CANCELLED', 'Đã hủy');
 ?>
+
+
+
+
+
+
+
+
+<?php
+
+define('BASE_URL', 'http://localhost/Du_an_1/');
+define('PATH_ADMIN', BASE_URL . 'Assets/admin/');
+define('CLIENT_URL', BASE_URL . 'Client/');
+
+?>
