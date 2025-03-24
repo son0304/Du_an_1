@@ -62,6 +62,17 @@
                             case 'orders':
                                 $controllerOrder->listOrder();
                                 break;
+                            case 'createOrder':
+                                $controllerOrder->createOrder();
+                                break;
+
+                            case 'updateOrder':
+                                $controllerOrder->updateOrder();
+                                break;
+
+                            case 'deleteOrder':
+                                $controllerOrder->deleteOrder();
+                                break;
 
 
                             //categories
