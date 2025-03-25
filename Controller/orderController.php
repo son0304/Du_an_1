@@ -34,6 +34,7 @@ class OrderController {
             }
         }
         $users = $this->orderModel->getUsers();
+        $sizes = $this->orderModel->getSizes();
         $product_sizes = $this->orderModel->getProductSizes();
         include_once __DIR__ . '/../View/Admin/orders/createOrder.php';
 

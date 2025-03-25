@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../Model/LoginModel.php';
+require_once __DIR__ . '/../Model/loginModel.php';
 
 class LoginController {
     private $loginModel;
@@ -10,7 +10,7 @@ class LoginController {
     }
 
     public function form(){
-        include_once __DIR__ . '/../View/CLient/login.php';
+        include_once __DIR__ . '/../Auth/login.php';
     }
 
     public function login() {
@@ -35,14 +35,16 @@ class LoginController {
             if ($user) {
                 $_SESSION['user'] = [
                     'email' => $user['email'],
-                    'role' => $user['role']
+                    'role' => $user['role'],
+                    'address' => $user['address'] ?? '', // Thêm address
+                    'phone' => $user['phone'] ?? ''      // Thêm phone
                 ];
 
                 // Điều hướng dựa trên vai trò
                 if ($user['role'] == 0) {
-                    header("Location: /Du_an_1/View/Admin/dashboard.php"); // Điều hướng đến trang quản trị
+                    header("Location: /Du_an_1/View/Admin/dashboard.php"); 
                 } else {
-                    header("Location:/Du_an_1/View/Client/index.php"); // Điều hướng đến trang chính của người dùng
+                    header("Location:/Du_an_1/View/Client/index.php");
                 }
                 exit();
             } else {
@@ -59,7 +61,7 @@ class LoginController {
     public function logout() {
         session_start();
         session_destroy();
-        header("Location: index.php?action=form");
+        header("Location: /Du_an_1/View/Client/index.php?action=form");
         exit();
     }
 }
