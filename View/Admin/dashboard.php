@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php 
     require_once '../../Config/config.php';
     require_once '../../Controller/productController.php';
@@ -68,6 +69,7 @@
 ?>
 
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
