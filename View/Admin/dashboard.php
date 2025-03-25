@@ -68,7 +68,7 @@
     }
 ?>
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -77,9 +77,9 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-    <!-- Use the full path to ensure proper routing -->
+
     <a href="/Du_an_1/View/Client/index.php?action=logout">
         <button type="button">Đăng xuất</button>
     </a>
 </body>
-</html>
+</html> -->
