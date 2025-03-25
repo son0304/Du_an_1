@@ -83,11 +83,6 @@
                     });
                 </script>
 
-
-                <div class="col-6 mt-2">
-                    <label class="form-label">Giá</label>
-                    <input type="text" id="priceInput" class="form-control" readonly>
-                </div>
                 <div class="col-6 mt-2">
                     <label class="form-label">Tên khách hàng</label>
                     <input type="text" name="name" class="form-control" required>

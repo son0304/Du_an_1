@@ -25,8 +25,6 @@ class OrderController {
             $result = $this->orderModel->createOrderModel($id_user, $id_productsize, $name, $address, $phone, $status, $create_at);
 
             if($result) {
-                session_start();
-                $_SESSION['success_message'] = "Thêm đơn hàng thành công!";
                 header('Location: dashboard.php?action=orders');
                 exit();
             } else {
@@ -51,8 +49,6 @@ class OrderController {
             $result = $this->orderModel->updateOrderModel($id, $id_productsize, $name, $address, $phone, $status);
     
             if ($result) {
-                session_start();
-                $_SESSION['success_message'] = "Cập nhật đơn hàng thành công!";
                 header('Location: dashboard.php?action=orders');
                 exit();
             } else {
@@ -74,8 +70,6 @@ class OrderController {
             $result = $this->orderModel->deleteOrderModel($id);
     
             if ($result) {
-                session_start();
-                $_SESSION['success_message'] = "Xóa đơn hàng thành công!";
                 header('Location: dashboard.php?action=orders');
                 exit();
             } else {
