@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
 <!DOCTYPE html>
-=======
-z<!DOCTYPE html>
->>>>>>> 00461e801bb6200557a4d064d6444f2aa39da0f5
 <html lang="en">
 
 <head>
