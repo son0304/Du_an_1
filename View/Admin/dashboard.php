@@ -1,11 +1,9 @@
-
-    <?php 
-    require_once '../../Config/config.php' ;
-    require_once '../../Controller/productController.php' ;
+<?php 
+    require_once '../../Config/config.php';
+    require_once '../../Controller/productController.php';
     require_once '../../Controller/userController.php';
     require_once '../../Controller/orderController.php';
     require_once '../../Controller/loginController.php';
-
 
     include_once '../../Layout/Admin/header.php';
     $action = $_GET['action'] ?? 'home';
@@ -14,53 +12,38 @@
     $controllerOrder = new OrderController($conn);
     $loginController = new LoginController($conn);
 
-
-
-
-
     switch ($action) {
+        // Order
+        case 'orders':
+            $controllerOrder->listOrder();
+            break;
+        case 'createOrder':
+            $controllerOrder->createOrder();
+            break;
+        case 'updateOrder':
+            $controllerOrder->updateOrder();
+            break;
+        case 'deleteOrder':
+            $controllerOrder->deleteOrder();
+            break;
 
-    //order
-    case 'orders':
-        $controllerOrder->listOrder();
-        break;
-    case 'createOrder':
-        $controllerOrder->createOrder();
-        break;
-
-    case 'updateOrder':
-        $controllerOrder->updateOrder();
-        break;
-
-    case 'deleteOrder':
-        $controllerOrder->deleteOrder();
-        break;
-
-
-        
-        //Product
+        // Product
         case 'product':
             $controllerProduct->listProduct();
             break;
-
         case 'createProduct':
             $controllerProduct->createProduct();
             break;
-
         case 'edit-product':
             $controllerProduct->updateProduct();
             break;
-
         case 'delete-product':
             $controllerProduct->detailProduct();
             break;
 
-        default:
-            echo "Chào mừng đến với trang quản trị!";
-            break;
-        //User 
-        case 'users': // Thêm trường hợp cho danh sách người dùng
-            $controllerUser ->listUser();
+        // User 
+        case 'users':
+            $controllerUser->listUser();
             break;
         case 'form-edit':
             $controllerUser->formEdit($_GET['id']);
@@ -72,25 +55,29 @@
             $controllerUser->deleteUser();
             break;
 
-        //logout
+        // Logout
         case 'logout':
             $loginController->logout();
             break;
 
+        // Default
+        default:
+            echo "Chào mừng đến với trang quản trị!";
+            break;
     }
-
-    // include_once '../../Layout/Admin/footer.php';
-
-    ?>
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Dashboard</title>
 </head>
 <body>
-    <a href="/Client/index.php?action=logout"><button>logout</button></a>
+    <!-- Use the full path to ensure proper routing -->
+    <a href="/Du_an_1/View/Client/index.php?action=logout">
+        <button type="button">Đăng xuất</button>
+    </a>
 </body>
 </html>

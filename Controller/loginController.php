@@ -61,7 +61,7 @@ class LoginController {
     public function logout() {
         session_start();
         session_destroy();
-        header("Location: Du_an_1/Client/index.php?action=form");
+        header("Location: /Du_an_1/View/Client/index.php?action=form");
         exit();
     }
 }
