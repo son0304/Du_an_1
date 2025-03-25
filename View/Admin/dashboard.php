@@ -4,12 +4,15 @@
     require_once '../../Controller/productController.php' ;
     require_once '../../Controller/userController.php';
     require_once '../../Controller/orderController.php';
+    require_once '../../Controller/loginController.php';
+
 
     include_once '../../Layout/Admin/header.php';
     $action = $_GET['action'] ?? 'home';
     $controllerProduct = new ProductController($conn);
     $controllerUser = new UserController($conn);
     $controllerOrder = new OrderController($conn);
+    $loginController = new LoginController($conn);
 
 
 
@@ -68,8 +71,26 @@
         case 'deleteUser':
             $controllerUser->deleteUser();
             break;
+
+        //logout
+        case 'logout':
+            $loginController->logout();
+            break;
+
     }
 
     // include_once '../../Layout/Admin/footer.php';
 
     ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/Client/index.php?action=logout"><button>logout</button></a>
+</body>
+</html>
