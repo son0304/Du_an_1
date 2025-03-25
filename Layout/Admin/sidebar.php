@@ -28,7 +28,7 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link" href="dashboard.php?action=user">
+        <a class="nav-link" href="dashboard.php?action=users">
             <i class=" fas fa-solid fa-users"></i>
             <span>User</span></a>
     </li>
