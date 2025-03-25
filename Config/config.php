@@ -10,9 +10,13 @@ $database = "sweet_cake";
 $conn = new mysqli($host, $username, $password, $database);
 
 if ($conn) {
-    echo "kết nối thành công";
+    // echo "kết nối thành công";
 }else{
     echo "Kết nối thât bại";
 }
 
+define('STATUS_UNCOMFIRMED', 'Chờ xác nhận');
+define('STATUS_CONFIRMED', 'Đã xác nhận');
+define('STATUS_SHIPPED', 'Đã giao');
+define('STATUS_CANCELLED', 'Đã hủy');
 ?>

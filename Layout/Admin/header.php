@@ -32,8 +32,12 @@
                         <a href="dashboard.php?action=users">Users</a>
                     </li>
                     <li>
-                        <i class="fa-solid fa-diagram-project"></i>
+                        <i class="fa-solid fa-bars"></i>
                         <a href="dashboard.php?action=product">Products</a>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <a href="dashboard.php?action=orders">Orders</a>
                     </li>
                     <li>
                         <i class="fa-solid fa-gears"></i>
