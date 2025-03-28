@@ -45,6 +45,14 @@ class OrderModel {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getSizes() {
+        $sql = 'SELECT id, name FROM sizes';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getOrderById($id) {
         $sql = 'SELECT * FROM orders WHERE id = ?';
         $stmt = $this->conn->prepare($sql);

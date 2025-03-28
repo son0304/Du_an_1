@@ -12,6 +12,7 @@ class ProductModel
 
     public function listProductModel()
     {
+<<<<<<< HEAD
         $sql = 'SELECT 
         p.id AS product_id, 
         p.name AS product_name, 
@@ -36,6 +37,24 @@ class ProductModel
 
 
     public function createProductModel($name, $description, $id_category, $img, $size)
+=======
+        $sql = "SELECT p.id, p.name, p.description, p.img, c.name AS category_name 
+
+        FROM products p
+        JOIN categories c ON p.id_category = c.id";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result(); // Lấy kết quả từ truy vấn
+
+        return $result->fetch_all(MYSQLI_ASSOC); // Dùng fetch_all thay vì fetchAll()
+    }
+
+    
+
+    // Tạo sản phẩm mới
+    public function createProductModel($name, $description, $id_category, $img, $sizes)
+>>>>>>> 294d0ce5651973c99dc7a54f79b0f0f9c3bc8737
     {
         $sql = "INSERT INTO products (name, description, id_category, img) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
@@ -82,6 +101,31 @@ class ProductModel
         $row = $result->fetch_assoc();
         return $row ? $row['id'] : null;
     }
+<<<<<<< HEAD
+=======
+
+    // Thêm size mới
+    private function insertSize($size_name)
+    {
+        $sql = "INSERT INTO sizes (name) VALUES (?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $size_name);
+        $stmt->execute();
+        return $this->conn->insert_id;
+    }
+
+    // Thêm vào bảng product_sizes
+    private function insertProductSize($id_product, $id_size, $price)
+    {
+        $sql = "INSERT INTO product_sizes (id_product, id_size, price) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("iid", $id_product, $id_size, $price);
+        $stmt->execute();
+    }
+
+    // Lấy danh sách danh mục
+
+>>>>>>> 294d0ce5651973c99dc7a54f79b0f0f9c3bc8737
     public function getCategories()
     {
         $sql  = "SELECT*FROM categories";
@@ -99,10 +143,22 @@ class ProductModel
         $stmt->bind_param('i', $id);
         $stmt->execute();
 
+<<<<<<< HEAD
         $delete_product = "DELETE FROM products WHERE id = ?";
         $stmt = $this->conn->prepare($delete_product);
+=======
+
+    }
+    public function detailProductModel($id)
+    {
+        $sql = "SELECT * FROM products WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+>>>>>>> 294d0ce5651973c99dc7a54f79b0f0f9c3bc8737
         $stmt->bind_param("i", $id);
         $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+
 
         $delte_size = "DELETE FROM sizes WHERE id NOT IN (SELECT DISTINCT id_size FROM product_sizes)";
         $this->conn->query($delte_size);
@@ -152,5 +208,6 @@ class ProductModel
         }
 
         return true;
+
     }
 }

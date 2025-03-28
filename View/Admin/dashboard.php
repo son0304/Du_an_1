@@ -1,4 +1,4 @@
-z<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -41,19 +41,18 @@ z<!DOCTYPE html>
                 <div class="container-fluid">
                     <div class="m-3 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
 
-
-
-
                         <?php
                         require_once '../../Config/config.php';
                         require_once '../../Controller/productController.php';
                         require_once '../../Controller/orderController.php';
-                        require_once  '../../Controller/categoriesController.php';
+                        require_once '../../Controller/categoriesController.php';
+                        require_once '../../Controller/userController.php';
 
                         $action = $_GET['action'] ?? 'home';
                         $controllerProduct = new ProductController($conn);
                         $categories = new categoriesController($conn);
                         $controllerOrder = new OrderController($conn);
+                        $controllerUser = new UserController($conn);
 
 
 
@@ -169,3 +168,4 @@ z<!DOCTYPE html>
 </body>
 
 </html>
+
