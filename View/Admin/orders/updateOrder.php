@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <title>Cập nhật đơn hàng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-4">
         <h2 class="text-center">Cập nhật đơn hàng</h2>
         <form action="" method="POST">
             <input type="hidden" name="id" value="<?= $order['id'] ?>">
-            
+
             <div class="row">
-                
+
                 <div class="col-6 mt-2">
                     <label class="form-label">Tên sản phẩm</label>
                     <select name="id_productsize" class="form-control" required>
@@ -55,12 +57,29 @@
                 <div class="col-6 mt-2">
                     <label class="form-label">Trạng thái</label>
                     <select name="status" class="form-control" required>
-                        <option value="<?= STATUS_UNCOMFIRMED ?>"><?= ucfirst(strtolower(STATUS_UNCOMFIRMED)) ?></option>
-                        <option value="<?= STATUS_CONFIRMED ?>"><?= ucfirst(strtolower(STATUS_CONFIRMED)) ?></option>
-                        <option value="<?= STATUS_SHIPPED ?>"><?= ucfirst(strtolower(STATUS_SHIPPED)) ?></option>
-                        <option value="<?= STATUS_CANCELLED ?>"><?= ucfirst(strtolower(STATUS_CANCELLED)) ?></option>
+                        <?php
+                        $currentStatus = $order['status']; // Trạng thái hiện tại 
+                        $statusOptions = [
+                            STATUS_UNCOMFIRMED,
+                            STATUS_CONFIRMED,
+                            STATUS_SHIPPED,
+                            STATUS_CANCELLED
+                        ];
+
+                        // Xác định các trạng thái hợp lệ (chỉ chọn trạng thái cao hơn)
+                        $canChooseStatus = false;
+                        foreach ($statusOptions as $status) {
+                            if ($status === $currentStatus) {
+                                $canChooseStatus = true; // Bắt đầu cho phép chọn các trạng thái tiếp theo
+                            }
+                            if ($canChooseStatus) {
+                                echo "<option value='$status'>" . ucfirst(strtolower($status)) . "</option>";
+                            }
+                        }
+                        ?>
                     </select>
                 </div>
+
             </div>
 
             <div class="row">
@@ -72,4 +91,5 @@
         </form>
     </div>
 </body>
+
 </html>

@@ -1,10 +1,4 @@
-<?php
-session_start();
-if (isset($_SESSION['success_message'])) {
-    echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
-    unset($_SESSION['success_message']); // Xóa thông báo sau khi hiển thị
-}
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

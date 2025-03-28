@@ -42,20 +42,20 @@ class ProductModel
 
     // Lấy ID của size nếu tồn tại
     public function getSizeId($size_name)
-    {
-        $sql = "SELECT id FROM sizes WHERE name = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $size_name);
-        $stmt->execute();
-        $stmt->bind_result($id_size);
-
-        $id_size = null;
-        if ($stmt->fetch()) {
-            return $id_size;
-        }
-
-        return null;
+{
+    $sql = "SELECT id FROM sizes WHERE name = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("s", $size_name);
+    $stmt->execute();
+    $stmt->bind_result($id_size);
+    
+    $id_size = null;
+    if ($stmt->fetch()) {
+        return $id_size;
     }
+
+    return null;
+}
 
     // Thêm size mới
     private function insertSize($size_name)
@@ -77,7 +77,6 @@ class ProductModel
     }
 
     // Lấy danh sách danh mục
-
     public function getCategories()
     {
         $sql = "SELECT id, name FROM categories";
@@ -89,12 +88,15 @@ class ProductModel
     // Xóa sản phẩm
     public function deleteProductModel($id)
     {
+        $sql = "DELETE FROM product_sizes WHERE id_product = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
 
         $sql = "DELETE FROM products WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
-        $stmt->execute();
-
+$stmt->execute();
 
         // Xóa size không còn sử dụng
         $sql = "DELETE FROM sizes WHERE id NOT IN (SELECT DISTINCT id_size FROM product_sizes)";
@@ -128,6 +130,5 @@ class ProductModel
             }
         }
         return true;
-
     }
 }
