@@ -1,42 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 text-gray-800"> Sản phẩm</h1>
+    </div>
 
-</head>
-
-<body>
-    <table class="table text-center">
-        <thead>
-            <h1 class="text-center">List Categories</h1>
-            <a href="dashboard.php?action=createCategory">
-                            <button class="btn btn-primary">Create</button>
-                        </a>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Action</th>
-
-        </thead>
-        <tbody>
-            <?php foreach ($categories as $category): ?>
-                <tr>
-                    <th><?= $category['id'] ?></th>
-                    <th><?= $category['name'] ?></th>
-                    <th>
-                        <a href="dashboard.php?action=editCategory&id=<?= $category['id'] ?>">
-                            <button class="btn btn-success">Update</button>
-                        </a>
-
-                    </th>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</body>
-
-</html>
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold">Danh mục sản phẩm</h6>
+            <a href="dashboard.php?action=addCategory" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Thêm mới
+        </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên danh mục</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($categories as $category): ?>
+                            <tr>
+                                <td><?= $category['id'] ?></td>
+                                <td><?= htmlspecialchars($category['name']) ?></td>
+                                <td>
+                                    <a href="dashboard.php?action=editCategory&id=<?= $category['id'] ?>" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

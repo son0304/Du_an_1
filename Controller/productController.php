@@ -89,24 +89,24 @@ class ProductController
         include_once __DIR__ . '/../View/Admin/products/updateProduct.php';
     }
 
-
     public function deleteProduct()
     {
-        if (!isset($_GET['id'])|| empty($_GET['id'])) {
-           echo "Không tìm thấy id cần xóa";
-           return;
+        if (!isset($_GET['id']) || empty($_GET['id'])) {
+            echo "Không tìm thấy id cần xóa";
+            return;
         }
 
         $id = $_GET['id'];
 
         if ($this->productModel->deleteProductModel($id)) {
-           echo "Xóa thành công!";
+            echo "Xóa thành công!";
         } else {
             echo "Lỗi khi xóa sản phẩm!";
         }
         header("Location: dashboard.php?action=product");
-        exit(); 
+        exit();
     }
+
 
     public function detailProduct()
     {
