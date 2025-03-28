@@ -1,7 +1,7 @@
 <?php
 
 
-define('BASE_URL', 'http://localhost/Du_an_2/');
+define('BASE_URL', 'http://localhost/Du_an_1/');
 define('BASE_URL_CSS', BASE_URL . 'Assets/css/');
 define('ADMIN_URL_CSS', BASE_URL_CSS . 'admin/');
 define('CLIENT_URL_CSS', BASE_URL_CSS . 'client/');
@@ -20,7 +20,3 @@ define('STATUS_UNCOMFIRMED', 'Chờ xác nhận');
 define('STATUS_CONFIRMED', 'Đã xác nhận');
 define('STATUS_SHIPPED', 'Đã giao');
 define('STATUS_CANCELLED', 'Đã hủy');
-<<<<<<< HEAD
-=======
-?>
->>>>>>> 294d0ce5651973c99dc7a54f79b0f0f9c3bc8737

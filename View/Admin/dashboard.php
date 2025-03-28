@@ -61,11 +61,8 @@
                             case 'users':
                                 $controllerUser->listUser();
                                 break;
-                            case 'form-edit':
-                                $controllerUser->formEdit($_GET['id']);
-                                break;
-                            case 'editUser':
-                                $controllerUser->editUser();
+                            case 'updateUser':
+                                $controllerUser->updateUser($_GET['id']);
                                 break;
                             case 'deleteUser':
                                 $controllerUser->deleteUser();
@@ -114,10 +111,10 @@
                                 $controllerProduct->createProduct();
                                 break;
 
-                            case 'edit-product':
-                                $controllerProduct->updateProduct();
+                            case 'updateProduct':
+                                $controllerProduct->updateProduct($_GET['id']);
                                 break;
-                            case 'delete-product':
+                            case 'deleteProduct':
                                 $controllerProduct->deleteProduct();
 
 
