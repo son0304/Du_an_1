@@ -13,25 +13,56 @@ class ProductModel
     public function listProductModel()
     {
         $sql = 'SELECT 
-        p.id AS product_id, 
-        p.name AS product_name, 
-        p.description AS product_description, 
-        p.img AS product_image, 
-        c.name AS category_name, 
-        s.name AS size_name, 
-        ps.price AS size_price
-    FROM product_sizes ps
-    LEFT JOIN products p ON ps.id_product = p.id
-    LEFT JOIN sizes s ON ps.id_size = s.id
-    LEFT JOIN categories c ON p.id_category = c.id
-    ORDER BY p.id, ps.id_size;
-    ';
-
+            p.id AS product_id, 
+            p.name AS product_name, 
+            p.description AS product_description, 
+            p.img AS product_image, 
+            c.name AS category_name, 
+            s.id AS size_id,
+            s.name AS size_name, 
+            ps.price AS size_price
+        FROM product_sizes ps
+        LEFT JOIN products p ON ps.id_product = p.id
+        LEFT JOIN sizes s ON ps.id_size = s.id
+        LEFT JOIN categories c ON p.id_category = c.id
+        ORDER BY p.id, ps.id_size;';
+    
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $rows = $result->fetch_all(MYSQLI_ASSOC);
+    
+        // Nhóm sản phẩm theo product_id
+        $products = [];
+        foreach ($rows as $row) {
+            $productId = $row['product_id'];
+    
+            // Nếu sản phẩm chưa có trong danh sách, thêm vào
+            if (!isset($products[$productId])) {
+                $products[$productId] = [
+                    'product_id' => $row['product_id'],
+                    'product_name' => $row['product_name'],
+                    'product_description' => $row['product_description'],
+                    'product_image' => $row['product_image'],
+                    'category_name' => $row['category_name'],
+                    'sizes' => [] // Mảng chứa kích thước của sản phẩm
+                ];
+            }
+    
+            // Thêm kích thước vào mảng 'sizes' của sản phẩm
+            if (!empty($row['size_id'])) {
+                $products[$productId]['sizes'][] = [
+                    'size_id' => $row['size_id'],
+                    'size_name' => $row['size_name'],
+                    'size_price' => $row['size_price']
+                ];
+            }
+        }
+    
+        // Trả về danh sách sản phẩm đã được nhóm
+        return array_values($products);
     }
+    
 
 
 
