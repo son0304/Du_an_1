@@ -1,4 +1,11 @@
+
+
+
+
+
+
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -28,6 +35,13 @@
 
 </head>
 
+<body>
+
+    <a href="/Du_an_1/View/Client/index.php?action=logout">
+        <button type="button">Đăng xuất</button>
+    </a>
+</body>
+</html> 
 <body id="page-top">
 
     <!-- Page Wrapper -->
