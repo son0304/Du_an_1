@@ -8,114 +8,134 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Roboto', sans-serif;
-        }
+body {
+    background-color: #f0f4f8;
+    font-family: 'Roboto', sans-serif;
+}
 
-        .category-container {
-            margin-bottom: 40px;
-        }
+.card {
+    border-radius: 15px;
+    border: 2px solid #0d6efd;
+    background-color: #ffffff;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
 
-        .card {
-            border-radius: 15px;
-            border: none;
-            background-color: white;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
-        }
+.card img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
 
-        .card img {
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px 10px 0 0;
-        }
+.product-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0d1a26;
+}
 
-        .product-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1976d2;
-        }
+.product-description {
+    font-size: 15px;
+    color: #4a4a4a;
+    margin-top: 5px;
+}
 
-        .product-description {
-            font-size: 15px;
-            color: #666;
-            margin-top: 5px;
-        }
+.delivery-time {
+    background: #ffffff;
+    border: 1px dashed #0d6efd;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #0d6efd;
+    border-radius: 8px;
+    margin: 10px 0;
+}
 
-        .size-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
+.price {
+    font-weight: bold;
+    font-size: 17px;
+    color: #dc3545; /* đỏ tươi */
+}
 
-        .size-button {
-            padding: 6px 12px;
-            border: 2px solid #1976d2;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            background: white;
-            color: #1976d2;
-        }
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 13px;
+    margin-right: 5px;
+}
 
-        .size-button.active {
-            background: #1976d2;
-            color: white;
-        }
+.size-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
 
-        .price {
-            font-weight: bold;
-            font-size: 17px;
-            color: #d32f2f;
-        }
+.size-button {
+    padding: 6px 12px;
+    border: 2px solid #0d6efd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    background: white;
+    color: #0d6efd;
+}
 
-        .btn-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
+.size-button.active {
+    background: #0d6efd;
+    color: white;
+}
 
-        .btn-buy-now {
-            flex: 1;
-            background: #1976d2;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            border: none;
-            font-size: 15px;
-        }
+.btn-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-        .btn-buy-now:hover {
-            background: #0d47a1;
-        }
+.btn-buy-now {
+    flex: 1;
+    background: #0d6efd;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s;
+    border: none;
+    font-size: 15px;
+    align-self: stretch;
+}
 
-        .btn-cart {
-            width: 44px;
-            height: 44px;
-            background: white;
-            border: 2px solid #1976d2;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: #1976d2;
-        }
+.btn-buy-now:hover {
+    background: #0b5ed7;
+}
 
-        .btn-cart:hover {
-            background: #1976d2;
-            color: white;
-        }
+.btn-cart {
+    background: white;
+    border: 2px solid #0d6efd;
+    border-radius: 5px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+    font-size: 18px;
+    color: #0d6efd;
+    align-self: stretch;
+}
+
+.btn-cart:hover {
+    background: #0d6efd;
+    color: white;
+}
+
     </style>
 </head>
 
