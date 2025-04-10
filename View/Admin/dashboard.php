@@ -54,17 +54,17 @@ if (!isset($_SESSION['user'])) {
                                 break;
 
                             //order
-                            case 'orders':
-                                $controllerOrder->listOrder();
-                                break;
+                            // case 'orders':
+                            //     $controllerOrder->listOrder();
+                            //     break;
 
-                            case 'updateOrder':
-                                $controllerOrder->updateOrder();
-                                break;
+                            // case 'updateOrder':
+                            //     $controllerOrder->updateOrder();
+                            //     break;
 
-                            case 'deleteOrder':
-                                $controllerOrder->deleteOrder();
-                                break;
+                            // case 'deleteOrder':
+                            //     $controllerOrder->deleteOrder();
+                            //     break;
 
 
                             //categories

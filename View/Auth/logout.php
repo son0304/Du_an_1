@@ -6,5 +6,5 @@ session_start();
 session_unset();
 session_destroy();
 
-header("Location: " . BASE_URL . "View/Auth/login.php"); // Chuyển hướng về login
+header("Location: " . BASE_URL . "View/Auth/login.php"); 
 exit();
