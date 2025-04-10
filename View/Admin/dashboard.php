@@ -1,4 +1,11 @@
-z<!DOCTYPE html>
+
+
+
+
+
+
+<!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -28,6 +35,13 @@ z<!DOCTYPE html>
 
 </head>
 
+<body>
+
+    <a href="/Du_an_1/View/Client/index.php?action=logout">
+        <button type="button">Đăng xuất</button>
+    </a>
+</body>
+</html> 
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -41,19 +55,18 @@ z<!DOCTYPE html>
                 <div class="container-fluid">
                     <div class="m-3 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
 
-
-
-
                         <?php
                         require_once '../../Config/config.php';
                         require_once '../../Controller/productController.php';
                         require_once '../../Controller/orderController.php';
-                        require_once  '../../Controller/categoriesController.php';
+                        require_once '../../Controller/categoriesController.php';
+                        require_once '../../Controller/userController.php';
 
                         $action = $_GET['action'] ?? 'home';
                         $controllerProduct = new ProductController($conn);
                         $categories = new categoriesController($conn);
                         $controllerOrder = new OrderController($conn);
+                        $controllerUser = new UserController($conn);
 
 
 
@@ -62,11 +75,8 @@ z<!DOCTYPE html>
                             case 'users':
                                 $controllerUser->listUser();
                                 break;
-                            case 'form-edit':
-                                $controllerUser->formEdit($_GET['id']);
-                                break;
-                            case 'editUser':
-                                $controllerUser->editUser();
+                            case 'updateUser':
+                                $controllerUser->updateUser($_GET['id']);
                                 break;
                             case 'deleteUser':
                                 $controllerUser->deleteUser();
@@ -113,10 +123,10 @@ z<!DOCTYPE html>
                                 $controllerProduct->createProduct();
                                 break;
 
-                            case 'edit-product':
-                                $controllerProduct->updateProduct();
+                            case 'updateProduct':
+                                $controllerProduct->updateProduct($_GET['id']);
                                 break;
-                            case 'delete-product':
+                            case 'deleteProduct':
                                 $controllerProduct->deleteProduct();
 
 
@@ -167,3 +177,4 @@ z<!DOCTYPE html>
 </body>
 
 </html>
+

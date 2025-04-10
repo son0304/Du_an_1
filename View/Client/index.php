@@ -27,6 +27,30 @@
                         <a href="shop.html">View All</a>
                     </div>
                 </div>
+
+        <?php 
+        require_once '../../Config/config.php';
+        require_once '../../Controller/client/categoryController.php';
+        require_once '../../Controller/client/productController.php';
+        $action = $_GET['action'] ?? 'home';
+        $controllerCategory = new categoryController($conn);
+        $controllerProduct = new ProductController($conn);
+
+        switch($action){
+            case 'category':
+                $controllerCategory->listCategoriesWithProducts();
+                break;
+            case 'products':
+                $controllerProduct->listProduct();
+                break;
+            case 'productDetail':
+                $controllerProduct->detailProduct($_GET['id']);
+                break;
+        }
+
+        
+        ?>
+
                 <div class="col-lg-3 col-md-6">
                     <div class="item">
                         <div class="thumb">

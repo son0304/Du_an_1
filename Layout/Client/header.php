@@ -7,8 +7,9 @@
 
             <!-- Navigation Menu -->
             <ul class="d-flex list-unstyled gap-4 m-0">
-                <li><a href="index.html" class="text-white text-decoration-none">Home</a></li>
-                <li><a href="shop.html" class="text-white text-decoration-none">Product</a></li>
+
+                <li><a href="index.php?action=products" class="text-white text-decoration-none">Home</a></li>
+                <li><a href="index.php?action=category" class="text-white text-decoration-none">Category</a></li>
                 <li><a href="product-details.html" class="text-white text-decoration-none">Order</a></li>
                 <li><a href="contact.html" class="text-white text-decoration-none">Contact Us</a></li>
             </ul>

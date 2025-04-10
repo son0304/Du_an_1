@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
 
 
 <!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 25 Mar 2025 09:17:30 GMT -->
@@ -1668,4 +1669,43 @@
 
 
 <!-- Mirrored from themes.pixelstrap.com/fastkart/front-end/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 25 Mar 2025 09:17:31 GMT -->
+=======
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Đăng nhập</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Đăng nhập</h2>
+        
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php 
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']); // Xóa thông báo lỗi sau khi hiển thị
+                ?>
+            </div>
+        <?php endif; ?>
+
+        <form action="index.php?action=login" method="POST">
+            <div class="mb-3">
+                <label for="exampleInputEmail" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" id="exampleInputEmail" 
+                       value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputPassword" class="form-label">Mật khẩu</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+        
+        <p class="mt-3">Chưa có tài khoản? <a href="index.php?action=registerform">Đăng ký ngay</a></p> <!-- Thêm liên kết đăng ký -->
+    </div>
+</body>
+>>>>>>> 294d0ce5651973c99dc7a54f79b0f0f9c3bc8737
 </html>
