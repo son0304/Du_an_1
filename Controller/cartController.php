@@ -51,7 +51,7 @@ class CartController
                     $this->cartModel->addToCartModel($id_user, $id_cart, $id_product, $id_size, $quantity, $totalPrice);
                 }
 
-                header("Location: /DA1/View/Client/index.php?act=viewCart");
+                header("Location: /Du_an_1/View/Client/index.php?action=viewCart");
                 exit();
             }
         }
@@ -78,7 +78,9 @@ class CartController
             exit;
         }
 
-        header("Location: /DA1/View/Client/index.php?act=viewCart");
+        header("Location: /Du_an_1/View/Client/index.php?action=viewCart");
         exit();
     }
+
+    
 }

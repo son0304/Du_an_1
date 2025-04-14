@@ -63,8 +63,8 @@ $product = $productModel->listProductModel();
                     'size_price' => $p['size_price']
                 ];
             }
-            $limited_products = array_slice($grouped_products, 0, 5);
-            foreach ($limited_products as $product_id => $data):
+
+            foreach ($grouped_products as $product_id => $data):
                 $product_info = $data['info'];
                 $sizes = $data['sizes'];
             ?>
@@ -87,6 +87,7 @@ $product = $productModel->listProductModel();
                                         <?= number_format($sizes[0]['size_price'], 0, ',', '.'); ?> VND
                                     </span>
                                 </p>
+
                                 <p class="card-text text-muted small d-none">Danh mục: <?= htmlspecialchars($product_info['category_name']); ?></p>
                                 <p class="mb-1 fw-semibold">Chọn kích thước:</p>
                                 <div class="size-row d-flex gap-2 flex-nowrap mb-2" data-product-id="<?= $product_id; ?>">
@@ -102,11 +103,11 @@ $product = $productModel->listProductModel();
                             </div>
                         </div>
                         <div class="card-footer bg-white py-2 d-flex align-items-center justify-content-between gap-2">
-                            <a href="?act=order&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
+                            <a href="?action=order&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
                                 class="buy-now-link flex-grow-1" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
                                 <button class="btn btn-primary w-100">⚡ Mua ngay</button>
                             </a>
-                            <a href="?act=addToCart&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
+                            <a href="?action=addToCart&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
                                 class="add-to-cart-link" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
                                 <button class="btn btn-outline-primary"><i class="bi bi-cart"></i></button>
                             </a>
@@ -116,6 +117,7 @@ $product = $productModel->listProductModel();
             <?php endforeach; ?>
         </div>
     </div>
+
     <!-- Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -154,7 +156,39 @@ $product = $productModel->listProductModel();
             </div>
         </div>
     </div>
-    </div>
+
+    <!-- CSS -->
+    <style>
+        .size-option {
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            min-width: 60px;
+        }
+
+        .size-option:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .active-size {
+            background-color: #007bff !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        #sliderContainer::-webkit-scrollbar {
+            display: none;
+        }
+
+        #productSearchInput {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+
+    <!-- JS -->
     <script>
         const slider = document.getElementById('sliderContainer');
         const scrollAmount = slider.querySelector('.product-card')?.offsetWidth || 300;
@@ -193,8 +227,8 @@ $product = $productModel->listProductModel();
                     const buyLink = document.querySelector(`.buy-now-link[data-product-id="${productId}"]`);
                     const cartLink = document.querySelector(`.add-to-cart-link[data-product-id="${productId}"]`);
 
-                    if (buyLink) buyLink.href = `?act=order&id=${productId}&size=${encodeURIComponent(size)}`;
-                    if (cartLink) cartLink.href = `?act=addToCart&id=${productId}&size=${encodeURIComponent(size)}`;
+                    if (buyLink) buyLink.href = `?action=order&id=${productId}&size=${encodeURIComponent(size)}`;
+                    if (cartLink) cartLink.href = `?action=addToCart&id=${productId}&size=${encodeURIComponent(size)}`;
                 }
             });
         });
@@ -220,8 +254,8 @@ $product = $productModel->listProductModel();
 
                 let selectedSize = sizes[0];
                 document.getElementById('modalProductPrice').innerText = Number(selectedSize.size_price).toLocaleString('vi-VN') + ' VND';
-                document.getElementById('modalBuyNow').href = `?act=order&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
-                document.getElementById('modalAddToCart').href = `?act=addToCart&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+                document.getElementById('modalBuyNow').href = `?action=order&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+                document.getElementById('modalAddToCart').href = `?action=addToCart&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
 
                 sizes.forEach((size, index) => {
                     const span = document.createElement('span');
@@ -235,8 +269,8 @@ $product = $productModel->listProductModel();
                         span.classList.add('active-size', 'bg-primary', 'text-white');
 
                         document.getElementById('modalProductPrice').innerText = Number(size.size_price).toLocaleString('vi-VN') + ' VND';
-                        document.getElementById('modalBuyNow').href = `?act=order&id=${id}&size=${encodeURIComponent(size.size_name)}`;
-                        document.getElementById('modalAddToCart').href = `?act=addToCart&id=${id}&size=${encodeURIComponent(size.size_name)}`;
+                        document.getElementById('modalBuyNow').href = `?action=order&id=${id}&size=${encodeURIComponent(size.size_name)}`;
+                        document.getElementById('modalAddToCart').href = `?action=addToCart&id=${id}&size=${encodeURIComponent(size.size_name)}`;
                     });
 
                     sizeContainer.appendChild(span);
@@ -246,35 +280,6 @@ $product = $productModel->listProductModel();
             });
         });
     </script>
-    <style>
-        .size-option {
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            min-width: 60px;
-        }
-
-        .size-option:hover {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .active-size {
-            background-color: #007bff !important;
-            color: white !important;
-            font-weight: bold;
-        }
-
-        #sliderContainer::-webkit-scrollbar {
-            display: none;
-        }
-
-        #productSearchInput {
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-        }
-    </style>
 </section>
 <section class="container my-5">
     <h3 class="text-center text-success fw-bold mb-4">💬 Đánh giá từ khách hàng</h3>

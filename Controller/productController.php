@@ -8,6 +8,12 @@ class ProductController
     {
         $this->productModel = new ProductModel($db);
     }
+
+    public function getProductById()
+    {
+        $id = $_GET['id'];
+        $product = $this->productModel->getProductById($id);
+    }
     public function listProduct()
     {
         $product = $this->productModel->listProductModel();

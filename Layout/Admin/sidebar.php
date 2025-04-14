@@ -54,4 +54,12 @@
             <span>Settings</span></a>
     </li>
 
+    <!-- Nav Item - Logout -->
+    <li class="nav-item mt-2">
+        <a class="nav-link d-flex align-items-center ml-1 my-4" href="http://localhost/Du_an_1/View/Auth/logout.php">
+            <i class="fas fa-sign-out-alt fs-6 me-2"></i>
+            <span class="fs-6">Logout</span>
+        </a>
+
+    </li>
 </ul>

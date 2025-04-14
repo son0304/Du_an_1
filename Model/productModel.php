@@ -20,12 +20,12 @@ class ProductModel
         c.name AS category_name, 
         s.name AS size_name, 
         ps.price AS size_price
-    FROM product_sizes ps
-    LEFT JOIN products p ON ps.id_product = p.id
-    LEFT JOIN sizes s ON ps.id_size = s.id
-    LEFT JOIN categories c ON p.id_category = c.id
-    ORDER BY p.id, ps.id_size;
-    ';
+        FROM product_sizes ps
+        LEFT JOIN products p ON ps.id_product = p.id
+        LEFT JOIN sizes s ON ps.id_size = s.id
+        LEFT JOIN categories c ON p.id_category = c.id
+        ORDER BY p.id, ps.id_size;
+       ';
 
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
@@ -42,7 +42,15 @@ class ProductModel
         return $result->fetch_assoc();
     }
 
-
+    public function getProductByCategory($id_category)
+    {
+        $sql = "SELECT * FROM products WHERE id_category = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id_category);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 
     public function createProductModel($name, $description, $id_category, $img, $size)
     {

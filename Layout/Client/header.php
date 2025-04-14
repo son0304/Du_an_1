@@ -30,15 +30,16 @@ if (isset($_SESSION['user'])) {
 
             <!-- Navigation Menu -->
             <ul class="d-flex list-unstyled gap-4 m-0">
-                <li><a href="?act=home" class="text-white text-decoration-none"><?= $setting['set2'] ?></a></li>
-                <li><a href="?act=product" class="text-white text-decoration-none"><?= $setting['set3'] ?></a></li>
-                <li><a href="product-details.html" class="text-white text-decoration-none"><?= $setting['set4'] ?></a></li>
-                <li><a href="?act=contact" class="text-white text-decoration-none"><?= $setting['set5'] ?></a></li>
+                <li><a href="?action=home" class="text-white text-decoration-none"><?= $setting['set2'] ?></a></li>
+                <li><a href="?action=product" class="text-white text-decoration-none"><?= $setting['set3'] ?></a></li>
+                <li><a href="?action=listOrder" class="text-white text-decoration-none"><?= $setting['set4'] ?></a></li>
+                <li><a href="?action=contact" class="text-white text-decoration-none"><?= $setting['set5'] ?></a></li>
+
             </ul>
 
             <!-- Cart & Sign In -->
             <div class="d-flex align-items-center gap-5">
-                <a href="?act=viewCart" class="text-white position-relative mt-1">
+                <a href="?action=viewCart" class="text-white position-relative mt-1">
                     <i class="fas fa-shopping-cart fa-lg"></i>
                     <?php if ($cartItemCount > 0): ?>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -48,17 +49,23 @@ if (isset($_SESSION['user'])) {
                 </a>
 
 
-                <?php if (isset($_SESSION['user'])) : ?>
-                    <div class="text-center">
+                <!-- Sign In Button -->
+                <?php
+                if (isset($_SESSION['user'])) {
+                    echo ' 
+                      <div class="text-center">
+                       
                         <a href="dashboard.php" class="text-white text-decoration-none"><i class="fas fa-user fa-lg"></i></a>
-                        <p class="text-white text-decoration-none mb-0"><?= $_SESSION['user']['name'] ?></p>
-                    </div>
-                    <a href="/Du_an_2/View/Auth/logout.php" class="text-white text-decoration-none">
-                        <i class="fas fa-sign-out-alt fa-lg"></i>
-                    </a>
-                <?php else : ?>
-                    <a href="login.html" class="btn btn-danger rounded-pill px-3 py-1">Sign in</a>
-                <?php endif; ?>
+                        <p class="text-white text-decoration-none">' . $_SESSION['user']['name'] . '</p>
+                      </div>
+                       <a href="http://localhost/Du_an_1/View/Auth/logout.php" class="text-white text-decoration-none"><i class="fas fa-sign-out-alt fa-lg"></i></a>
+                       ';
+                } else {
+                    echo ' <a href="http://localhost/Du_an_1/View/Auth/login.php" class="btn btn-danger rounded-pill px-3 py-1">
+                       Sign in
+                   </a>';
+                }
+                ?>
             </div>
         </div>
     </div>

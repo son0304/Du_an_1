@@ -11,6 +11,16 @@ class CartModel
         $this->conn = $db;
     }
 
+
+    public function getCartItemById($id) {
+        $sql = "SELECT * FROM cart_items WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
     // Lấy danh sách sản phẩm trong giỏ hàng theo user
     public function viewCartModel($id_user)
     {
@@ -126,4 +136,5 @@ class CartModel
         $row = $result->fetch_assoc();
         return $row['total'];
     }
+
 }

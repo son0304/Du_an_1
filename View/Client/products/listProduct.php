@@ -111,11 +111,11 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white py-2 d-flex align-items-center justify-content-between gap-2">
-                        <a href="?act=order&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
+                        <a href="?action=order&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
                             class="buy-now-link flex-grow-1" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
                             <button class="btn btn-primary w-100">⚡ Mua ngay</button>
                         </a>
-                        <a href="?act=addToCart&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
+                        <a href="?action=addToCart&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
                             class="add-to-cart-link" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
                             <button class="btn btn-outline-primary"><i class="bi bi-cart"></i></button>
                         </a>
@@ -239,8 +239,8 @@
                 const buyLink = document.querySelector(`.buy-now-link[data-product-id="${productId}"]`);
                 const cartLink = document.querySelector(`.add-to-cart-link[data-product-id="${productId}"]`);
 
-                if (buyLink) buyLink.href = `?act=order&id=${productId}&size=${encodeURIComponent(size)}`;
-                if (cartLink) cartLink.href = `?act=addToCart&id=${productId}&size=${encodeURIComponent(size)}`;
+                if (buyLink) buyLink.href = `?action=order&id=${productId}&size=${encodeURIComponent(size)}`;
+                if (cartLink) cartLink.href = `?action=addToCart&id=${productId}&size=${encodeURIComponent(size)}`;
             }
         });
     });
@@ -266,8 +266,8 @@
 
             let selectedSize = sizes[0];
             document.getElementById('modalProductPrice').innerText = Number(selectedSize.size_price).toLocaleString('vi-VN') + ' VND';
-            document.getElementById('modalBuyNow').href = `?act=order&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
-            document.getElementById('modalAddToCart').href = `?act=addToCart&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+            document.getElementById('modalBuyNow').href = `?action=order&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+            document.getElementById('modalAddToCart').href = `?action=addToCart&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
 
             sizes.forEach((size, index) => {
                 const span = document.createElement('span');
@@ -281,8 +281,8 @@
                     span.classList.add('active-size', 'bg-primary', 'text-white');
 
                     document.getElementById('modalProductPrice').innerText = Number(size.size_price).toLocaleString('vi-VN') + ' VND';
-                    document.getElementById('modalBuyNow').href = `?act=order&id=${id}&size=${encodeURIComponent(size.size_name)}`;
-                    document.getElementById('modalAddToCart').href = `?act=addToCart&id=${id}&size=${encodeURIComponent(size.size_name)}`;
+                    document.getElementById('modalBuyNow').href = `?action=order&id=${id}&size=${encodeURIComponent(size.size_name)}`;
+                    document.getElementById('modalAddToCart').href = `?action=addToCart&id=${id}&size=${encodeURIComponent(size.size_name)}`;
                 });
 
                 sizeContainer.appendChild(span);

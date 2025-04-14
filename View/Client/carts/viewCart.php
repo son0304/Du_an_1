@@ -76,7 +76,7 @@
 
         <div class="text-end mt-4" id="cart-summary">
             <h4>Tổng cộng: <strong id="cart-total"><?= number_format($totalPrice, 0, ',', '.') ?> ₫</strong></h4>
-            <a href="checkout.php" class="btn btn-success mt-2">💳 Thanh toán</a>
+            <a href="?action=order&id_cart=<?= $cart['id'] ?>" class="btn btn-success mt-2">💳 Thanh toán</a>
         </div>
     <?php else: ?>
         <p class="alert alert-warning text-center mt-5">🛒 Giỏ hàng trống.</p>
@@ -94,10 +94,10 @@ $(document).ready(function () {
         const itemTotal = parseFloat(row.data('total'));
 
         $.ajax({
-            url: "/DA1/View/Client/index.php",
+            url: "/Du_an_1/View/Client/index.php",
             method: "GET",
             data: {
-                act: "removeFromCart",
+                action: "removeFromCart",
                 id: itemId
             },
             success: function () {
