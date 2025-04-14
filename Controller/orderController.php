@@ -1,82 +1,67 @@
 <?php
 
 require_once __DIR__ . '/../Model/orderModel.php';
+require_once __DIR__ . '/../Model/sizeModel.php';
 
-class OrderController {
+
+class OrderController
+{
     private $orderModel;
+    private $productModel;
+    private $sizeModel;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->orderModel = new OrderModel($db);
+        $this->productModel = new ProductModel($db);
+        $this->sizeModel = new SizeModel($db);
     }
+
     public function listOrder() {
         $order = $this->orderModel->listOrderModel();
         include_once __DIR__ . '/../View/Admin/orders/listOrder.php';
     }
-
-    public function createOrder() {
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id_user = $_POST['id_user'];
-            $id_productsize = $_POST['id_productsize'];
-            $name = $_POST['name'];
-            $address = $_POST['address'];
-            $phone = $_POST['phone'];
-            $status = $_POST['status'];
-            $create_at = date('Y-m-d H:i:s');
-            $result = $this->orderModel->createOrderModel($id_user, $id_productsize, $name, $address, $phone, $status, $create_at);
-
-            if($result) {
-                header('Location: dashboard.php?action=orders');
-                exit();
-            } else {
-                echo "Loi khi them order!";
-            }
-        }
-        $users = $this->orderModel->getUsers();
-        $sizes = $this->orderModel->getSizes();
-        $product_sizes = $this->orderModel->getProductSizes();
-        include_once __DIR__ . '/../View/Admin/orders/createOrder.php';
-
-    }
-
-    public function updateOrder() {
+    public function createOrder()
+    {
+        $id_product = $_GET['id'] ?? null;
+        $size_name = $_GET['size'] ?? null;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id = $_POST['id'];
-            $id_productsize = $_POST['id_productsize'];
+            $id_user = $_SESSION['user']['id'];
             $name = $_POST['name'];
-            $address = $_POST['address'];
             $phone = $_POST['phone'];
-            $status = $_POST['status'];
-            $result = $this->orderModel->updateOrderModel($id, $id_productsize, $name, $address, $phone, $status);
-    
-            if ($result) {
-                header('Location: dashboard.php?action=orders');
-                exit();
-            } else {
-                echo "Lỗi khi cập nhật đơn hàng!";
-            }
-        }
-    
-        $id = $_GET['id'];
-        $order = $this->orderModel->getOrderById($id);
-        // $users = $this->orderModel->getUsers();
-        $product_sizes = $this->orderModel->getProductSizes();
-        
-        include_once __DIR__ . '/../View/Admin/orders/updateOrder.php';
-    }
-    
-    public function deleteOrder() {
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-            $result = $this->orderModel->deleteOrderModel($id);
-    
-            if ($result) {
-                header('Location: dashboard.php?action=orders');
-                exit();
-            } else {
-                echo "Lỗi khi xóa đơn hàng!";
-            }
-        }
-    }
-    
-}
+            $address = $_POST['address'];
+            $status = STATUS_UNCOMFIRMED;
+            $created_at = date('Y-m-d H:i:s');
 
+
+            if (isset($id_product)) {
+                $cart_item = [];
+                $cart_item[] = [
+                    'id_product' => $id_product,
+                    'quantity' => (int)$_POST['quantity'] ?? 2,
+                    'id_size' => $this->sizeModel->getSizeId($size_name),
+                    'price' => $this->sizeModel->getProductPrice($id_product, $size_name),
+
+                ];
+            } else {
+                
+            }
+            $total_price = 0;
+            foreach ($cart_item as $item) {
+                $total_price += $item['price'] * $item['quantity'];
+            }
+
+
+
+            $id_order = $this->orderModel->createOrderModel($id_user, $name, $phone, $address, $total_price, $cart_item, $status, $created_at);
+           
+        }
+
+        $product = $this->productModel->getProductById($id_product);
+        $products = [];
+        if ($product) {
+            $products[] = $product;
+        }
+        include_once __DIR__ . '/../View/Client/orders/order.php';
+    }
+}

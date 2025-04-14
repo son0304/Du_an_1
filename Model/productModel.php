@@ -32,6 +32,15 @@ class ProductModel
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    public function getProductById($id)
+    {
+        $sql = "SELECT * FROM products WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
 
 
 
@@ -46,7 +55,7 @@ class ProductModel
         foreach ($size as $size_name => $price) {
             $size_id = $this->getSizeId($size_name);
 
-    
+
             if (!$size_id) {
                 $sql = "INSERT INTO sizes (name) VALUES (?)";
                 $stmt = $this->conn->prepare($sql);

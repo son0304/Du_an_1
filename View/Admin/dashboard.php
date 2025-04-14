@@ -47,16 +47,23 @@
                         require_once '../../Controller/orderController.php';
                         require_once '../../Controller/categoriesController.php';
                         require_once '../../Controller/userController.php';
+                        require_once '../../Controller/settingController.php';
+
 
                         $action = $_GET['action'] ?? 'home';
                         $controllerProduct = new ProductController($conn);
                         $categories = new categoriesController($conn);
                         $controllerOrder = new OrderController($conn);
                         $controllerUser = new UserController($conn);
+                        $controllerSetting = new SettingController($conn);
 
 
 
                         switch ($action) {
+                            case 'home':
+                                require_once '../../View/Admin/masters/master.php';
+                                break;
+
                             //Usser
                             case 'users':
                                 $controllerUser->listUser();
@@ -74,14 +81,6 @@
                                 break;
                             case 'createOrder':
                                 $controllerOrder->createOrder();
-                                break;
-
-                            case 'updateOrder':
-                                $controllerOrder->updateOrder();
-                                break;
-
-                            case 'deleteOrder':
-                                $controllerOrder->deleteOrder();
                                 break;
 
 
@@ -117,7 +116,13 @@
                             case 'deleteProduct':
                                 $controllerProduct->deleteProduct();
 
-
+                                //Setting
+                            case 'settings':
+                                $controllerSetting->listSetting();
+                                break;
+                            case 'updateSetting':
+                                $controllerSetting->updateSetting();
+                                break;
                             default:
                                 echo "Chào mừng đến với trang quản trị!";
                                 break;

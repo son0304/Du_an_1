@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="dashboard.php?action=home">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -48,14 +48,10 @@
         </div>
     </li>
 
-
     <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
+        <a class="nav-link" href="dashboard.php?action=settings">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span></a>
     </li>
-
-
-
 
 </ul>

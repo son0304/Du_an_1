@@ -13,13 +13,22 @@ class ProductController
         $product = $this->productModel->listProductModel();
         include_once __DIR__ . '/../View/Admin/products/listProduct.php';
     }
+
+    public function listProductClient()
+    {
+        $product = $this->productModel->listProductModel();
+        include_once __DIR__ . '/../View/Client/products/listProduct.php';
+    }
     public function createProduct()
     {
+        // Check if the request method is POST
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Retrieve data from the form
             $name = $_POST['name'];
             $description = $_POST['description'];
             $id_category = $_POST['id_category'];
 
+            // Process product sizes and prices
             $size = [];
             foreach ($_POST['size']['size'] as $key => $size_name) {
                 $price = $_POST['size']['price'][$key];
