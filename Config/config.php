@@ -1,7 +1,7 @@
 <?php
 
 
-define('BASE_URL', 'http://localhost/Du_an_2/');
+define('BASE_URL', 'http://localhost/Du_an_1/');
 define('BASE_URL_CSS', BASE_URL . 'Assets/css/');
 define('ADMIN_URL_CSS', BASE_URL_CSS . 'admin/');
 define('CLIENT_URL_CSS', BASE_URL_CSS . 'client/');

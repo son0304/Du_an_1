@@ -8,6 +8,17 @@ class ProductController
     {
         $this->productModel = new ProductModel($db);
     }
+
+    public function listProductClient()
+    {
+        $product = $this->productModel->listProductModel();
+        include_once __DIR__ . '/../View/Client/product.php';
+    }
+    public function getProductById()
+    {
+        $id = $_GET['id'];
+        $product = $this->productModel->getProductById($id);
+    }
     public function listProduct()
     {
         $product = $this->productModel->listProductModel();

@@ -33,7 +33,7 @@ class AuthController
                 exit();
             } else {
                 $_SESSION['error'] = "Tên đăng nhập hoặc mật khẩu không đúng!";
-                header("Location: .BASE_URL . View/Auth/login.php");
+                header("Location: ".BASE_URL . "View/Auth/login.php");
                 exit();
             }
         }
@@ -44,7 +44,7 @@ class AuthController
     public function logout()
     {
         session_destroy();
-        header("Location: .BASE_URL . View/Auth/login.php");
+        header("Location: ".BASE_URL . "View/Auth/login.php");
         exit();
     }
 }

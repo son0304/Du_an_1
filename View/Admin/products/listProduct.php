@@ -28,7 +28,6 @@
                         <?php
                         $grouped_products = [];
 
-                        // Nhóm sản phẩm theo ID, mỗi sản phẩm có thể có nhiều kích thước (size)
                         foreach ($product as $p) {
                             $product_id = $p['product_id'];
                             if (!isset($grouped_products[$product_id])) {

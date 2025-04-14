@@ -1,60 +1,110 @@
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 text-gray-800">Đơn hàng</h1>
-    </div>
+<div class="py-5">
+    <h2 class="text-primary mb-4 text-center">Danh sách đơn hàng (Admin)</h2>
 
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold">Danh sách đơn hàng</h6>
-            <a href="dashboard.php?action=createOrder" class="btn btn-primary">
-                <i class="fas fa-plus-circle"></i> Thêm mới
-            </a>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="thead">
-
+    <?php if (!empty($orders)) : ?>
+        <div class="rounded table-responsive">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr> 
+                        <th scope="col">Mã Đơn</th>
+                        <th scope="col">Khách hàng</th>
+                        <th scope="col">Ngày nhận</th>
+                        <th scope="col">Thanh toán</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Ngày đặt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($orders as $order): ?>
                         <?php
-                        if (isset($_SESSION['user'])) {
-                            echo "Xin chào, " . $_SESSION['user']['name'];
-                        } else {
-                            echo "Bạn chưa đăng nhập!";
+                        // Xử lý trạng thái hiển thị màu sắc
+                        $statusClass = 'secondary';
+                        switch (strtolower($order['status'])) {
+                            case 'đã giao':
+                            case 'hoàn tất':
+                                $statusClass = 'success';
+                                break;
+                            case 'đang xử lý':
+                                $statusClass = 'warning';
+                                break;
+                            case 'đã huỷ':
+                                $statusClass = 'danger';
+                                break;
+                            case 'đang giao':
+                                $statusClass = 'info';
+                                break;
                         }
                         ?>
                         <tr>
-                            <th>Người tạo</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Kích cỡ</th>
-                            <th>Giá</th>
-                            <th>Tên khách hàng</th>
-                            <th>Địa chỉ</th>
-                            <th>SĐT</th>
-                            <th>Trạng thái đơn hàng</th>
-                            <th>Ngày tạo</th>
-                            <th>Hành động</th>
+                            <td class="text-center">
+                                <a href="?action=detailOrder&id=<?= $order['id'] ?>" class="badge bg-<?= $statusClass ?>"><?= $order['id'] ?></a>
+                            </td>
+                            <td>
+                                <small><strong><?= ($order['name']) ?></strong><br>
+                                <?= ($order['phone']) ?></small>
+                            </td>
+                            <td class="text-center">
+                                <small><?= ($order['received_time']) ?><br>
+                                <?= ($order['received_date']) ?></small>
+                            </td>
+                            <td class="text-center"><small><?= ($order['payment']) ?></small></td>
+                            <td class="text-center">
+                                <span class="badge bg-<?= $statusClass ?> text-capitalize"><?= ($order['status']) ?></span>
+                            </td>
+                            <td class="text-center"><small><?= number_format($order['total_price'], 0, ',', '.') ?>đ</small></td>
+                            <td class="text-center"><small><?= ($order['created_at']) ?></small></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($order as $order): ?>
-                            <tr>
-                                <td><?= $order['user_name'] ?></td>
-                                <td><?= $order['pz_product'] ?></td>
-                                <td><?= $order['pz_size'] ?></td>
-                                <td><?= number_format($order['pz_price'], 0, ',', '.') ?> VND</td>
-                                <td><?= $order['name'] ?></td>
-                                <td><?= $order['address'] ?></td>
-                                <td><?= $order['phone'] ?></td>
-                                <td><?= $order['status'] ?></td>
-                                <td><?= $order['created_at'] ?></td>
-                                <td>
-                                    <a href="dashboard.php?action=updateOrder&id=<?= $order['id'] ?>" class="btn btn-warning btn-sm">Sửa</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
-    </div>
+    <?php else : ?>
+        <div class="alert alert-info text-center">Không có đơn hàng nào.</div>
+    <?php endif; ?>
 </div>
+
+<style>
+    /* Đặt màu sắc cho các trạng thái */
+    .badge.bg-success {
+        background-color: #00C77F;
+    }
+    .badge.bg-warning {
+        background-color: #ffc107;
+    }
+    .badge.bg-danger {
+        background-color: #dc3545;
+    }
+    .badge.bg-info {
+        background-color: #17a2b8;
+    }
+
+    /* Định dạng lại kích thước chữ nhỏ */
+    td small, th small {
+        font-size: 0.85rem;
+    }
+
+    /* Sử dụng nền sáng cho tiêu đề bảng */
+    .thead-light {
+        background-color: #f8f9fa;
+    }
+
+    /* Hiệu ứng hover cho dòng bảng */
+    table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Tùy chỉnh giao diện bảng để không có viền */
+    table {
+        width: 100%;
+    }
+    th, td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    /* Đảm bảo chiều rộng bảng không bị cắt khi có quá nhiều dữ liệu */
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>

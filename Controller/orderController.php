@@ -1,87 +1,129 @@
 <?php
 
 require_once __DIR__ . '/../Model/orderModel.php';
+require_once __DIR__ . '/../Model/productModel.php';
+require_once __DIR__ . '/../Model/sizeModel.php';
 
-class OrderController {
+class OrderController
+{
     private $orderModel;
+    private $productModel;
+    private $sizeModel;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->orderModel = new OrderModel($db);
+        $this->productModel = new ProductModel($db);
+        $this->sizeModel = new SizeModel($db);
     }
-    public function listOrder() {
-        $order = $this->orderModel->listOrderModel();
+
+
+
+    function listOrders() {
+        $orders = $this->orderModel->listOrderModel();
+
         include_once __DIR__ . '/../View/Admin/orders/listOrder.php';
     }
 
-    public function createOrder() {
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id_user = $_POST['id_user'];
-            $id_productsize = $_POST['id_productsize'];
-            $name = $_POST['name'];
-            $address = $_POST['address'];
-            $phone = $_POST['phone'];
-            $status = $_POST['status'];
-            $create_at = date('Y-m-d H:i:s');
-            $result = $this->orderModel->createOrderModel($id_user, $id_productsize, $name, $address, $phone, $status, $create_at);
+    function detailOrderAdmin() {
+        $id = $_GET['id'] ?? null;
+        $orderDetail = $this->orderModel->getOrderById($id);
 
-            if($result) {
-                session_start();
-                $_SESSION['success_message'] = "Thêm đơn hàng thành công!";
-                header('Location: dashboard.php?action=orders');
-                exit();
-            } else {
-                echo "Loi khi them order!";
-            }
-        }
-        $users = $this->orderModel->getUsers();
-        $product_sizes = $this->orderModel->getProductSizes();
-        include_once __DIR__ . '/../View/Admin/orders/createOrder.php';
-
+        include_once __DIR__ . '/../View/Admin/orders/detailOrder.php';
     }
 
-    public function updateOrder() {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $id = $_POST['id'];
-            $id_productsize = $_POST['id_productsize'];
-            $name = $_POST['name'];
-            $address = $_POST['address'];
-            $phone = $_POST['phone'];
-            $status = $_POST['status'];
-            $result = $this->orderModel->updateOrderModel($id, $id_productsize, $name, $address, $phone, $status);
-    
-            if ($result) {
-                session_start();
-                $_SESSION['success_message'] = "Cập nhật đơn hàng thành công!";
-                header('Location: dashboard.php?action=orders');
-                exit();
-            } else {
-                echo "Lỗi khi cập nhật đơn hàng!";
-            }
+
+
+
+
+
+
+//=====================client=====================
+    public function listOrdersByUser()
+    {
+        $id_user = $_SESSION['user']['id'] ?? null; 
+        if (!$id_user) {
+            echo "Vui lòng đăng nhập.";
+            return;
         }
-    
-        $id = $_GET['id'];
-        $order = $this->orderModel->getOrderById($id);
-        // $users = $this->orderModel->getUsers();
-        $product_sizes = $this->orderModel->getProductSizes();
-        
-        include_once __DIR__ . '/../View/Admin/orders/updateOrder.php';
+
+        $orders = $this->orderModel->getOrdersByUserId($id_user);
+        include_once __DIR__ . '/../View/Client/order/listOrder.php';
     }
-    
-    public function deleteOrder() {
-        if (isset($_GET['id'])) {
-            $id = $_GET['id'];
-            $result = $this->orderModel->deleteOrderModel($id);
-    
-            if ($result) {
-                session_start();
-                $_SESSION['success_message'] = "Xóa đơn hàng thành công!";
-                header('Location: dashboard.php?action=orders');
-                exit();
-            } else {
-                echo "Lỗi khi xóa đơn hàng!";
-            }
+
+
+
+    // Hiển thị chi tiết đơn hàng của khách hàng
+    public function detailOrderClient()
+    {
+        $id_order = $_GET['id'] ?? null;
+        $orderDetail = $this->orderModel->getOrderById($id_order);
+        include_once __DIR__ . '/../View/Client/order/orderDetail.php';
+    }
+
+    // Tạo đơn hàng mới
+    public function createOrder()
+    {
+        // Lấy thông tin sản phẩm và kích thước
+        $id_product = $_GET['id'] ?? null;
+        $size_name = $_GET['size'] ?? null;
+        $product = $this->productModel->getProductById($id_product);
+        $price = $this->sizeModel->getProductPrice($id_product, $size_name);
+        $products = [];
+
+        if ($product) {
+            $products[] = $product;
         }
+
+        try {
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Lấy thông tin người dùng và đơn hàng từ POST
+                $id_user = $_SESSION['user']['id'];
+                $name = $_POST['name'];
+                $phone = $_POST['phone'];
+                $address = $_POST['address'];
+                $status = "Created";
+                $created_at = date('Y-m-d H:i:s');
+                $received_date = $_POST['received_date'] ?? null;
+                $received_time = $_POST['received_time'] ?? null;
+                $payment = $_POST['payment'] ?? null;
+
+                // Xử lý cart_item nếu có sản phẩm
+                if (isset($id_product)) {
+                    $cart_item = [];
+                    $cart_item[] = [
+                        'id_product' => $id_product,
+                        'quantity' => (int) ($_POST['quantity'] ?? 1),
+                        'id_size' => $this->sizeModel->getSizeId($size_name),
+                        'price' => $price,
+                    ];
+                } else {
+                    // Thêm logic tải danh sách cart_item từ database
+                }
+
+                // Tính tổng giá trị đơn hàng
+                $total_price = 0;
+                foreach ($cart_item as $item) {
+                    $total_price += $item['price'] * $item['quantity'];
+                }
+
+                // Tạo đơn hàng mới
+                $id_order = $this->orderModel->createOrderModel($id_user, $name, $phone, $address, $total_price, $cart_item, $status, $created_at, $received_date, $payment, $received_time);
+                if ($id_order) {
+                    echo "
+                    <script>
+                    alert('Đặt hàng thành công');
+                    window.location.href='?action=detailOrder&id=$id_order';
+                    </script>";
+                    exit;
+                } else {
+                    echo "<script>alert('Đã xảy ra lỗi khi tạo đơn hàng.');</script>";
+                }
+            }
+        } catch (Exception $e) {
+            echo "<script>alert('Đã xảy ra lỗi trong quá trình đặt hàng. Vui lòng thử lại.');</script>";
+        }
+
+        include_once __DIR__ . '/../View/Client/order/order.php';
     }
-    
 }
-
