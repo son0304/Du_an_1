@@ -18,7 +18,6 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Password</th>
                             <th>Phone</th>
                             <th>Địa chỉ</th>
                             <th>Quyền hạn</th>
@@ -31,7 +30,6 @@
                                 <td><?= $row['id'] ?></td>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['email'] ?></td>
-                                <td><?= $row['password'] ?></td>
                                 <td><?= $row['phone'] ?></td>
                                 <td><?= $row['address'] ?></td>
                                 <td>
@@ -43,6 +41,7 @@
                                 </td>
 
                                 <td>
+
                                     <?php
 
                                     if ($row['role'] == 1) {

@@ -41,7 +41,9 @@ class ProductModel
         $result = $stmt->get_result();
         return $result->fetch_assoc();
     }
-    public function getProductByCategory($id_category){
+
+    public function getProductByCategory($id_category)
+    {
         $sql = "SELECT * FROM products WHERE id_category = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id_category);
@@ -49,8 +51,6 @@ class ProductModel
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-
-
 
     public function createProductModel($name, $description, $id_category, $img, $size)
     {

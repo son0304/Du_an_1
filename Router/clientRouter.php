@@ -25,8 +25,20 @@ switch ($action) {
     case 'detailOrder':
         $controllerOrder->detailOrderClient();
         break;
-    case 'cart':
-        $controllerCart->listCart();
+    case 'addToCart':
+        $controllerCart->addToCart();
+        break;
+    case 'viewCart':
+        $controllerCart->viewCart();
+        break;
+    case 'removeFromCart':
+        $controllerCart->removeFromCart();
+        break;
+    case 'home':
+        require_once '../../View/Client/home/home.php';
+        break;
+    case 'contact':
+        require_once '../../View/Client/contacts/contact.php';
         break;
 
     default:

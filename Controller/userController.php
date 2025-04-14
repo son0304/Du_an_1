@@ -37,7 +37,7 @@ class UserController
     }
 
 
-    public function updatetUser()
+    public function updateUser()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_GET['id'])) {

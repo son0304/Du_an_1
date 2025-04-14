@@ -40,4 +40,7 @@ class SizeModel
         $row = $result->fetch_assoc();
         return $row ? $row['id'] : null;
     }
+
 }
+
+

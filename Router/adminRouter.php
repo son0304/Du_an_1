@@ -4,14 +4,20 @@ require_once '../../Controller/productController.php';
 require_once '../../Controller/orderController.php';
 require_once '../../Controller/categoriesController.php';
 require_once '../../Controller/userController.php';
+require_once '../../Controller/settingController.php';
+
 
 $action = $_GET['action'] ?? 'home';
 $controllerProduct = new ProductController($conn);
 $categories = new categoriesController($conn);
 $controllerOrder = new OrderController($conn);
 $controllerUser = new UserController($conn);
+$controllerSetting = new SettingController($conn);
 
 switch ($action) {
+    case 'home':
+        require_once '../../View/Admin/masters/master.php';
+        break;
     // User Management
     case 'users':
         $controllerUser->listUser();
@@ -20,7 +26,7 @@ switch ($action) {
         $controllerUser->createUser();
         break;
     case 'updateUser':
-        $controllerUser->updatetUser();
+        $controllerUser->updateUser();
         break;
     case 'deleteUser':
         $controllerUser->deleteUser();
@@ -63,6 +69,13 @@ switch ($action) {
         $controllerProduct->deleteProduct();
         break;
 
+    //Setting
+    case 'settings':
+        $controllerSetting->listSetting();
+        break;
+    case 'updateSetting':
+        $controllerSetting->updateSetting();
+        break;
     default:
         echo "Chào mừng đến với trang quản trị!";
         break;

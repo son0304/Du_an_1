@@ -3,18 +3,22 @@
 require_once __DIR__ . '/../Model/orderModel.php';
 require_once __DIR__ . '/../Model/productModel.php';
 require_once __DIR__ . '/../Model/sizeModel.php';
+require_once __DIR__ . '/../Model/cartModel.php';
 
 class OrderController
 {
     private $orderModel;
     private $productModel;
     private $sizeModel;
+    private $cartModel;
+
 
     public function __construct($db)
     {
         $this->orderModel = new OrderModel($db);
         $this->productModel = new ProductModel($db);
         $this->sizeModel = new SizeModel($db);
+        $this->cartModel = new CartModel($db);
     }
 
 
@@ -67,6 +71,7 @@ class OrderController
         // Lấy thông tin sản phẩm và kích thước
         $id_product = $_GET['id'] ?? null;
         $size_name = $_GET['size'] ?? null;
+        $id_Cart = $_GET['id_Cart'] ?? null;
         $product = $this->productModel->getProductById($id_product);
         $price = $this->sizeModel->getProductPrice($id_product, $size_name);
         $products = [];
@@ -82,7 +87,7 @@ class OrderController
                 $name = $_POST['name'];
                 $phone = $_POST['phone'];
                 $address = $_POST['address'];
-                $status = "Created";
+                $status = "Chờ xác nhận";
                 $created_at = date('Y-m-d H:i:s');
                 $received_date = $_POST['received_date'] ?? null;
                 $received_time = $_POST['received_time'] ?? null;
@@ -98,7 +103,8 @@ class OrderController
                         'price' => $price,
                     ];
                 } else {
-                    // Thêm logic tải danh sách cart_item từ database
+                    // $cart_item = $this->cartModel->getCartItemById($id_Cart);
+                    // var_dump($cart_item);
                 }
 
                 // Tính tổng giá trị đơn hàng
