@@ -18,8 +18,14 @@ class CartController
     }
     public function viewCart()
     {
-        $id_user = $_SESSION['user']['id'];
-        $carts = $this->cartModel->viewCartModel($id_user);
+        if (!isset($_SESSION['user'])) {
+            header("Location: ../Auth/404.php");
+            exit();  
+        } else {
+            $id_user = $_SESSION['user']['id'];
+            $carts = $this->cartModel->viewCartModel($id_user);
+        }
+
         include_once __DIR__ . '/../View/Client/carts/viewCart.php';
     }
     public function addToCart()
@@ -81,6 +87,4 @@ class CartController
         header("Location: /Du_an_1/View/Client/index.php?action=viewCart");
         exit();
     }
-
-    
 }

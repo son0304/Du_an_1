@@ -45,6 +45,8 @@ $error = $auth->login();
             font-weight: bold;
         }
     </style>
+    <link rel="icon" type="image/png" href="../../Assets//image/products/Sweet Cake.jpg">
+
 </head>
 
 <body>
@@ -70,7 +72,7 @@ $error = $auth->login();
             <a href="#" class="text-decoration-none">Forgot Password?</a>
         </div>
         <div class="text-center mt-2">
-            <a href="#" class="text-decoration-none">Create an Account!</a>
+            <a href="<?= BASE_URL . 'Router/clientRouter.php?action=register' ?>" class="text-decoration-none">Create an Account!</a>
         </div>
     </div>
 
