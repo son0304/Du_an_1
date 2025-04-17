@@ -1,34 +1,37 @@
 <?php
-require_once '../../Config/config.php';
+require_once __DIR__ . '/../Config/config.php';
 
-class RegisterModel {
+class RegisterModel
+{
     private $conn;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function registerModel($name, $email, $password, $phone, $address) {
-        // Check if email already exists
-        $checkEmail = "SELECT id FROM users WHERE email = ?";
-        $stmt = $this->conn->prepare($checkEmail);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            return false; // Email already exists
-        }
-
-        // Insert new user with role = 1
-        $sql = "INSERT INTO users (name, email, password, phone, address, role) VALUES (?, ?, ?, ?, ?, 1)";
+    public function registerModel($name, $email, $password, $phone, $address)
+    {
+        // Insert new user with role = 0
+        $sql = "INSERT INTO users (name, email, password, phone, address, role) VALUES (?, ?, ?, ?, ?, 0)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sssss", $name, $email, $password, $phone, $address);
-        
+
         if ($stmt->execute()) {
-            return $this->conn->insert_id; // Return the ID of the newly created user
+            return true;
+        } else {
+            return false;
         }
-        
-        return false;
+    }
+
+    public function isNameExists($name)
+    {
+        $sql = "SELECT id FROM users WHERE name = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $stmt->store_result();
+
+        return $stmt->num_rows > 0;
     }
 }

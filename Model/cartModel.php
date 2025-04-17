@@ -11,16 +11,6 @@ class CartModel
         $this->conn = $db;
     }
 
-
-    public function getCartItemById($id) {
-        $sql = "SELECT * FROM cart_items WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
-    }
-
     // Lấy danh sách sản phẩm trong giỏ hàng theo user
     public function viewCartModel($id_user)
     {
@@ -128,13 +118,11 @@ class CartModel
 
     public function countCartItems($id_cart)
     {
-        $sql = "SELECT SUM(quantity) as total FROM cart_items WHERE id_cart = ?";
+        $sql = "SELECT COUNT(DISTINCT id_product) as unique_products FROM cart_items WHERE id_cart = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id_cart);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        return $row['total'];
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['unique_products'] ?? 0;
     }
-
 }

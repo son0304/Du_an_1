@@ -88,7 +88,7 @@
                         data-sizes='<?= json_encode($sizes) ?>'>
                     <div class="card-body flex-grow-1 d-flex flex-column">
                         <h5 class="card-title fw-bold"><?= htmlspecialchars($product_info['product_name']); ?></h5>
-                        <p class="card-text"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></p>
+                        <p class="card-text d-none"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></p>
                         <div class="mt-auto">
                             <p class="fw-bold text-danger mb-2">Giá:
                                 <span id="price-<?= $product_id; ?>">
@@ -111,14 +111,21 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white py-2 d-flex align-items-center justify-content-between gap-2">
-                        <a href="?action=order&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
-                            class="buy-now-link flex-grow-1" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
+                        <?php
+                        $buyNowLink = isset($_SESSION['user'])
+                            ? "?action=order&id=$product_id&size=" . urlencode($sizes[0]['size_name'])
+                            : "../Auth/404.php";
+                        $addToCartLink = isset($_SESSION['user'])
+                            ? "?action=addToCart&id=$product_id&size=" . urlencode($sizes[0]['size_name'])
+                            : "../Auth/404.php";
+                        ?>
+                        <a href="<?= $buyNowLink ?>" class="buy-now-link flex-grow-1" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
                             <button class="btn btn-primary w-100">⚡ Mua ngay</button>
                         </a>
-                        <a href="?action=addToCart&id=<?= $product_id; ?>&size=<?= urlencode($sizes[0]['size_name']); ?>"
-                            class="add-to-cart-link" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
+                        <a href="<?= $addToCartLink ?>" class="add-to-cart-link" data-product-id="<?= $product_id; ?>" data-default-size="<?= $sizes[0]['size_name']; ?>">
                             <button class="btn btn-outline-primary"><i class="bi bi-cart"></i></button>
                         </a>
+
                     </div>
                 </div>
             </div>
@@ -128,20 +135,24 @@
 
 <!-- Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg custom-modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="productModalLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-            </div>
-            <div class="modal-body">
+            <div class="modal-body m-2">
+                <button type="button" class="btn-close m-2" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 <div class="row g-4 align-items-start">
                     <div class="col-md-5">
                         <img id="modalProductImage" src="" class="img-fluid rounded shadow w-100" alt="Ảnh sản phẩm">
                     </div>
                     <div class="col-md-7">
+                        <h3 class="modal-title fw-bold" id="productModalLabel"></h3>
                         <p id="modalProductDesc" class="mb-3"></p>
                         <p class="fw-bold text-danger">Giá: <span id="modalProductPrice"></span></p>
+                        <!-- ⭐ Đánh giá, review, sold -->
+                        <p class="mb-2">
+                            ⭐ <span id="modalProductRating" class="me-3"></span>
+                            📝 <span id="modalProductReviewCount" class="me-3"></span>
+                            🔥 <span id="modalProductSold"></span>
+                        </p>
                         <div class="mb-3">
                             <p class="mb-1 fw-semibold">Chọn kích thước:</p>
                             <div id="modalSizeOptions" class="d-flex gap-2 flex-wrap"></div>
@@ -193,6 +204,33 @@
         font-size: 1rem;
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
+    }
+
+    @media (min-width: 1000px) {
+        .modal-lg.custom-modal-lg {
+            max-width: 1000px;
+            /* tăng từ 800px lên 950px */
+        }
+    }
+
+    #modalProductImage {
+        max-height: 370px;
+        object-fit: cover;
+    }
+
+    #productModalLabel {
+        color: #4CAF50;
+        /* Màu lá mạ */
+    }
+
+    .modal-header {
+        position: relative;
+    }
+
+    .btn-close {
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 </style>
 
@@ -257,6 +295,16 @@
             const imageUrl = img.dataset.img;
             const sizes = JSON.parse(img.dataset.sizes);
 
+            // Dữ liệu giả cho đánh giá / review / sold
+            const fakeRating = (Math.random() * 0.5 + 4.5).toFixed(1);
+            const fakeReview = Math.floor(Math.random() * 100 + 10); // 10 - 109 reviews
+            const fakeSold = Math.floor(Math.random() * 500 + 50); // 50 - 549 sold
+
+            document.getElementById('modalProductRating').innerText = fakeRating + ' / 5.0';
+            document.getElementById('modalProductReviewCount').innerText = fakeReview + ' đánh giá';
+            document.getElementById('modalProductSold').innerText = fakeSold + ' đã bán';
+
+            // Gán nội dung modal như cũ
             document.getElementById('productModalLabel').innerText = name;
             document.getElementById('modalProductImage').src = imageUrl;
             document.getElementById('modalProductDesc').innerText = desc;
@@ -266,8 +314,14 @@
 
             let selectedSize = sizes[0];
             document.getElementById('modalProductPrice').innerText = Number(selectedSize.size_price).toLocaleString('vi-VN') + ' VND';
-            document.getElementById('modalBuyNow').href = `?action=order&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
-            document.getElementById('modalAddToCart').href = `?action=addToCart&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+            <?php if (isset($_SESSION['user'])): ?>
+                document.getElementById('modalBuyNow').href = `?action=order&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+                document.getElementById('modalAddToCart').href = `?action=addToCart&id=${id}&size=${encodeURIComponent(selectedSize.size_name)}`;
+            <?php else: ?>
+                document.getElementById('modalBuyNow').href = `../Auth/404.php`;
+                document.getElementById('modalAddToCart').href = `../Auth/404.php`;
+            <?php endif; ?>
+
 
             sizes.forEach((size, index) => {
                 const span = document.createElement('span');

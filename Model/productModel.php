@@ -1,5 +1,6 @@
 <?php
-require_once '../../Config/config.php';
+require_once __DIR__ . '/../Config/config.php';
+
 
 class ProductModel
 {
