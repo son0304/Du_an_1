@@ -8,8 +8,16 @@ if (!isset($_SESSION['user'])) {
 require_once '../Auth/authMiddleware.php';
 ?>
 
+
 <?php require_once '../../Layout/Admin/head.php' ?>
 
+<body>
+
+    <a href="/Du_an_1/View/Client/index.php?action=logout">
+        <button type="button">Đăng xuất</button>
+    </a>
+</body>
+</html> 
 <body id="page-top">
     <div id="wrapper">
         <?php require_once '../../Layout/Admin/sidebar.php'; ?>
@@ -19,6 +27,7 @@ require_once '../Auth/authMiddleware.php';
                 <div class="container-fluid">
                     <div class="m-3 shadow-lg p-3 mb-5 bg-body-tertiary rounded">
                         <?php require_once '../../Router/adminRouter.php'; ?>
+
                     </div>
                 </div>
 

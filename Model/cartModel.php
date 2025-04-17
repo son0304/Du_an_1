@@ -11,6 +11,18 @@ class CartModel
         $this->conn = $db;
     }
 
+    public function getCartItemByIdCart($id)
+    {
+        $sql = "SELECT * FROM cart_items WHERE id_cart = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+   
     // Lấy danh sách sản phẩm trong giỏ hàng theo user
     public function viewCartModel($id_user)
     {
@@ -28,13 +40,13 @@ class CartModel
 
         $id_cart = $row['id'];
 
-        // Lấy các sản phẩm trong giỏ hàng
+
         $sql = 'SELECT 
                     ci.id, 
                     ci.id_product, 
                     ci.id_size, 
                     ci.quantity, 
-                    ci.totalPrice,
+                    ci.price,
                     p.name AS product_name, 
                     p.img AS product_image,
                     s.name AS size_name,
@@ -60,7 +72,7 @@ class CartModel
                 'size_name'     => $item['size_name'],
                 'size_price'    => $item['size_price'],
                 'quantity'      => $item['quantity'],
-                'totalPrice'    => $item['totalPrice']
+                'price'    => $item['price']
             ];
         }
 
@@ -68,12 +80,12 @@ class CartModel
     }
 
     // Thêm sản phẩm vào giỏ hàng
-    public function addToCartModel($id_user, $id_cart, $id_product, $id_size, $quantity, $totalPrice)
+    public function addToCartModel($id_user, $id_cart, $id_product, $id_size, $quantity, $price)
     {
-        $sql_insert = "INSERT INTO cart_items (id_cart, id_product, id_size, quantity, totalPrice)
+        $sql_insert = "INSERT INTO cart_items (id_cart, id_product, id_size, quantity, price)
                        VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql_insert);
-        $stmt->bind_param("iiiid", $id_cart, $id_product, $id_size, $quantity, $totalPrice);
+        $stmt->bind_param("iiiid", $id_cart, $id_product, $id_size, $quantity, $price);
         return $stmt->execute();
     }
 
@@ -99,11 +111,11 @@ class CartModel
     }
 
     // ✅ Cập nhật lại số lượng và tổng giá của item trong giỏ
-    public function updateCartItem($id_cart_item, $quantity, $totalPrice)
+    public function updateCartItem($id_cart_item, $quantity, $price)
     {
-        $sql = "UPDATE cart_items SET quantity = ?, totalPrice = ? WHERE id = ?";
+        $sql = "UPDATE cart_items SET quantity = ?, price = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("idi", $quantity, $totalPrice, $id_cart_item);
+        $stmt->bind_param("idi", $quantity, $price, $id_cart_item);
         return $stmt->execute();
     }
 
@@ -115,6 +127,15 @@ class CartModel
         $stmt->bind_param("i", $id_cart_item);
         return $stmt->execute();
     }
+
+    public function clearCart($id_cart)
+    {
+        $query = "DELETE FROM cart_items WHERE id_cart = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i", $id_cart);
+        return $stmt->execute();
+    }
+
 
     public function countCartItems($id_cart)
     {

@@ -17,6 +17,7 @@ if (!isset($_SESSION['user'])) {
         <div class="container">
             <?php require_once '../../Router/clientRouter.php'; ?>
 
+
         </div>
     </div>
     <?php require_once '../../Layout/Client/footer.php' ?>
@@ -24,5 +25,7 @@ if (!isset($_SESSION['user'])) {
     <?php require_once '../../Layout/Client/script.php' ?>
 
 </body>
+
+
 
 </html>

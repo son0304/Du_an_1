@@ -9,16 +9,19 @@
 </head>
 
 <body>
-
     <div class="container py-5">
-        <form action="" method="post">
+        <form action="" method="post" id="orderForm">
             <div class="row g-4">
-                <!-- Danh sách sản phẩm -->
+                <!-- Thông tin sản phẩm -->
                 <div class="col-lg-8">
                     <div class="card p-4">
                         <h4 class="text-center text-primary mb-4">Thông tin sản phẩm</h4>
 
                         <?php foreach ($products as $product) : ?>
+                            <?php
+                            $quantity = isset($_GET['id_cart']) ? $product['quantity'] : 1;
+                            $price = $product['price'];
+                            ?>
                             <div class="row align-items-center mb-3 border-bottom pb-3">
                                 <div class="col-3">
                                     <img src="/Du_an_1/Assets/image/products/<?= htmlspecialchars($product['img']) ?>" alt="Ảnh sản phẩm" class="img-fluid rounded">
@@ -28,18 +31,11 @@
                                     <p class="text-danger fw-bold mb-2">Giá: <?= number_format($price, 0, ',', '.') ?> ₫</p>
                                     <div class="mb-2">
                                         <label for="quantity_<?= $product['id'] ?>" class="form-label">Số lượng</label>
-                                        <input type="number"
-                                            name="quantity[<?= $product['id'] ?>]"
-                                            id="quantity_<?= $product['id'] ?>"
-                                            class="form-control form-control-sm w-50 quantity-input"
-                                            min="1"
-                                            value="1"
-                                            data-price="<?= $price ?>">
+                                        <input type="number" name="quantity[]" id="quantity_<?= $product['id'] ?>" class="form-control form-control-sm w-50 quantity-input" min="1" value="<?= $quantity ?>" data-price="<?= $price ?>">
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-
                     </div>
                 </div>
 
@@ -56,6 +52,7 @@
                         <div class="mb-3">
                             <label for="phone" class="form-label">Số điện thoại</label>
                             <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" class="form-control" required>
+                            <div id="phoneError" class="text-danger d-none">Số điện thoại không hợp lệ. Vui lòng nhập lại!</div>
                         </div>
 
                         <div class="mb-3">
@@ -66,35 +63,24 @@
                         <div class="mb-3">
                             <label for="received_date" class="form-label">Ngày nhận</label>
                             <input type="date" id="received_date" name="received_date" class="form-control" required>
+                            <div id="dateError" class="text-danger d-none">Không được đặt cho quá khứ</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="received_time" class="form-label">Giờ nhận</label>
-                            <select id="received_time" name="received_time" class="form-select" required>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                                <option value="18:00">18:00</option>
-                                <option value="19:00">19:00</option>
-                                <option value="20:00">20:00</option>
-                                <option value="21:00">21:00</option>
-                            </select>
+                            <div class="d-flex align-items-center">
+                                <input type="time" id="received_time" name="received_time" class="form-control me-2" required>
+                                <span class="input-group-text">Giờ</span>
+                            </div>
+                            <div id="timeError" class="text-danger d-none mt-2">Thời gian nhận bánh từ 8-21h. Giờ nhận phải cách giờ hiện tại ít nhất 1 tiếng!</div>
                         </div>
 
-                        <!-- Hình thức thanh toán -->
                         <div class="mb-3">
                             <label class="form-label d-block">Hình thức thanh toán</label>
                             <div class="d-flex justify-content-between">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="payment" id="cod" value="COD" checked>
-                                    <label class="form-check-label" for="cod"> (COD)</label>
+                                    <label class="form-check-label" for="cod">COD</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="payment" id="bank" value="BANK">
@@ -103,7 +89,6 @@
                             </div>
                         </div>
 
-                        <!-- Thông tin chuyển khoản -->
                         <div id="bankInfo" class="alert alert-info d-none">
                             <p class="mb-1"><strong>Thông tin chuyển khoản:</strong></p>
                             <ul class="mb-0">
@@ -114,7 +99,6 @@
                             </ul>
                         </div>
 
-                        <!-- Tổng tiền -->
                         <div class="mb-3">
                             <strong class="text-danger">Tổng tiền: <span id="totalPriceText">0</span> VND</strong>
                         </div>
@@ -126,8 +110,26 @@
         </form>
     </div>
 
-    <!-- JavaScript tính tổng tiền và hiển thị hình thức thanh toán -->
     <script>
+        <?php if (isset($message)): ?>
+
+            Swal.fire({
+                icon: '<?php echo $type; ?>',
+                title: '<?php echo $message; ?>',
+                showConfirmButton: true,
+                position: 'top',
+                toast: true,
+                timer: 3000,
+                timerProgressBar: true,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        <?php endif; ?>
+
         function formatCurrency(number) {
             return number.toLocaleString('vi-VN');
         }
@@ -135,33 +137,95 @@
         function updateTotalPrice() {
             const quantityInputs = document.querySelectorAll('.quantity-input');
             let total = 0;
-
             quantityInputs.forEach(input => {
                 const price = parseFloat(input.dataset.price);
                 const quantity = parseInt(input.value) || 0;
                 total += price * quantity;
             });
-
             document.getElementById('totalPriceText').textContent = formatCurrency(total);
         }
 
-        document.querySelectorAll('.quantity-input').forEach(input => {
-            input.addEventListener('input', updateTotalPrice);
-        });
+        function toggleBankInfo() {
+            const bankInfo = document.getElementById('bankInfo');
+            const isBankSelected = document.getElementById('bank').checked;
+            bankInfo.classList.toggle('d-none', !isBankSelected);
+        }
 
-        updateTotalPrice();
+        function validatePhone(phone) {
+            const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+            return phoneRegex.test(phone);
+        }
 
-        // Hiển thị thông tin chuyển khoản nếu chọn hình thức chuyển khoản
-        const codRadio = document.getElementById('cod');
-        const bankRadio = document.getElementById('bank');
-        const bankInfo = document.getElementById('bankInfo');
+        function validateDate(date) {
+            const today = new Date();
+            const selectedDate = new Date(date);
+            return selectedDate >= today;
+        }
 
-        codRadio.addEventListener('change', () => {
-            bankInfo.classList.add('d-none');
-        });
+        function validateTime(time) {
+            const currentTime = new Date();
+            const selectedTime = new Date(currentTime.toDateString() + ' ' + time);
 
-        bankRadio.addEventListener('change', () => {
-            bankInfo.classList.remove('d-none');
+            const currentDate = currentTime.toDateString();
+            const selectedDate = selectedTime.toDateString();
+            const selectedHour = selectedTime.getHours();
+            if (selectedHour < 8 || selectedHour >= 21) {
+                return false;
+            }
+
+            // Nếu chọn thời gian trong ngày hôm nay, phải sau thời điểm hiện tại ít nhất 1 tiếng
+            if (currentDate === selectedDate) {
+                const oneHourLater = new Date(currentTime.getTime() + 60 * 60 * 1000);
+                return selectedTime >= oneHourLater;
+            }
+            return true;
+        }
+
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateTotalPrice();
+            toggleBankInfo();
+
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('input', updateTotalPrice);
+            });
+
+            document.getElementsByName('payment').forEach(radio => {
+                radio.addEventListener('change', toggleBankInfo);
+            });
+
+            const orderForm = document.getElementById('orderForm');
+            orderForm.addEventListener('submit', (event) => {
+                let valid = true;
+
+                const phone = document.getElementById('phone').value;
+                if (!validatePhone(phone)) {
+                    document.getElementById('phoneError').classList.remove('d-none');
+                    valid = false;
+                } else {
+                    document.getElementById('phoneError').classList.add('d-none');
+                }
+
+                const receivedDate = document.getElementById('received_date').value;
+                if (!validateDate(receivedDate)) {
+                    document.getElementById('dateError').classList.remove('d-none');
+                    valid = false;
+                } else {
+                    document.getElementById('dateError').classList.add('d-none');
+                }
+
+                const receivedTime = document.getElementById('received_time').value;
+                if (!validateTime(receivedTime)) {
+                    document.getElementById('timeError').classList.remove('d-none');
+                    valid = false;
+                } else {
+                    document.getElementById('timeError').classList.add('d-none');
+                }
+
+                if (!valid) {
+                    event.preventDefault();
+                }
+            });
         });
     </script>
 </body>
