@@ -18,7 +18,6 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Password</th>
                             <th>Phone</th>
                             <th>Địa chỉ</th>
                             <th>Quyền hạn</th>
@@ -31,8 +30,7 @@
                                 <td><?= $row['id'] ?></td>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['email'] ?></td>
-                                <td><?= $row['password'] ?></td>
-                                <td><?= $row['phone'] ?></td>
+                                <td><?= htmlspecialchars($row['phone']) ?></td>
                                 <td><?= $row['address'] ?></td>
                                 <td>
                                     <?php if ($row['role'] == 1): ?>
@@ -43,12 +41,15 @@
                                 </td>
 
                                 <td>
-                                    <a href="dashboard.php?action=updateUser&id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> Sửa
-                                    </a>
-                                    <a href="dashboard.php?action=deleteUser&id=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">
-                                        <i class="fas fa-trash"></i> Xóa
-                                    </a>
+
+                                    <?php
+
+                                    if ($row['role'] == 1) {
+                                      
+                                    } else {
+                                        echo '<a href="dashboard.php?action=editUser&id=' . $row['id'] . '" class="btn btn-warning mx-2"><i class="fas fa-edit"></i></a>';
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
