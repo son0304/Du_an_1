@@ -16,6 +16,7 @@ class OrderModel
     {
         $sql = "SELECT * FROM orders ORDER BY received_date ASC, received_time ASC";
 
+
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -49,6 +50,7 @@ class OrderModel
     
         p.name AS product_name,
         p.img AS product_image
+
     
         FROM order_details od
         INNER JOIN orders o ON od.id_order = o.id

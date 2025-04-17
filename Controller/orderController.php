@@ -52,7 +52,6 @@ class OrderController
             exit;
         }
 
-        // Lấy thông tin chi tiết đơn hàng
         $orderDetail = $this->orderModel->getOrderById($id_order);
         include_once __DIR__ . '/../View/Admin/orders/detailOrder.php';
     }
@@ -69,14 +68,19 @@ class OrderController
         }
 
         $search = $_POST['search'] ?? null;
-        if (!empty($search)) {
-            $searchFormatted = '%' . trim($search) . '%';
-            $orders = $this->orderModel->searchOrderByUser($id_user, $searchFormatted);
+        $status = $_POST['status'] ?? null;
+
+        $searchFormatted = '%' . trim($search) . '%';
+
+        if (!empty($search) || !empty($status)) {
+            $orders = $this->orderModel->searchOrderByUser($id_user, $searchFormatted, $status);
         } else {
             $orders = $this->orderModel->getOrdersByUserId($id_user);
         }
+
         include_once __DIR__ . '/../View/Client/order/listOrder.php';
     }
+
 
 
     public function detailOrderClient()
@@ -84,7 +88,6 @@ class OrderController
         $id_order = $_GET['id'] ?? null;
         $orderDetail = $this->orderModel->getOrderById($id_order);
 
-        // Cập nhật trạng thái đơn hàng
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_order'])) {
             $id_order = $_POST['id_order'] ?? null;
             $status = $_POST['status'] ?? null;
