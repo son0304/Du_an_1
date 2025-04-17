@@ -32,6 +32,17 @@ class ProductModel
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function getProductByCart($id)
+    {
+        $sql = "SELECT * FROM products WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getProductById($id)
     {
         $sql = "SELECT * FROM products WHERE id = ?";

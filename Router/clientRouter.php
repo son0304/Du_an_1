@@ -19,6 +19,9 @@ switch ($action) {
     case 'order':
         $controllerOrder->createOrder();
         break;
+    case 'order':
+        $controllerOrder->createOrder();
+        break;
     case 'listOrder':
         $controllerOrder->listOrdersByUser();
         break;
