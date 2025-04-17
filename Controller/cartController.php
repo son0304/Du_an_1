@@ -21,6 +21,7 @@ class CartController
         $id_user = $_SESSION['user']['id'];
         $id_cart = $this->cartModel->getCartByIdUser($id_user)['id'];
         $carts = $this->cartModel->viewCartModel($id_user);
+
         include_once __DIR__ . '/../View/Client/carts/viewCart.php';
     }
     public function addToCart()

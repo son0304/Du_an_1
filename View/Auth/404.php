@@ -50,6 +50,8 @@
             background-color: #0056b3;
         }
     </style>
+    <link rel="icon" type="image/png" href="../../Assets//image/products/Sweet Cake.jpg">
+
 </head>
 
 <body>

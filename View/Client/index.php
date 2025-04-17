@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
-    header("Location: ../Auth/404.php");
-    exit();
+    // header("Location: ../Auth/404.php");
+    // exit();
 }
 ?>
 <!DOCTYPE html>

@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
-    <title>Sweet_Cake</title>
+    <title>Sweet Cake</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../../Assets/client/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
     <!--
 
-
+    
 -->
+    <link rel="icon" type="image/png" href="../../Assets//image/products/Sweet Cake.jpg">
+
 </head>

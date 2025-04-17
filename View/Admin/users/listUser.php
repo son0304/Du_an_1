@@ -30,7 +30,7 @@
                                 <td><?= $row['id'] ?></td>
                                 <td><?= $row['name'] ?></td>
                                 <td><?= $row['email'] ?></td>
-                                <td><?= $row['phone'] ?></td>
+                                <td><?= htmlspecialchars($row['phone']) ?></td>
                                 <td><?= $row['address'] ?></td>
                                 <td>
                                     <?php if ($row['role'] == 1): ?>
@@ -48,7 +48,6 @@
                                       
                                     } else {
                                         echo '<a href="dashboard.php?action=editUser&id=' . $row['id'] . '" class="btn btn-warning mx-2"><i class="fas fa-edit"></i></a>';
-                                        echo '<a href="dashboard.php?action=deleteUser&id=' . $row['id'] . '" class="btn btn-danger"><i class="fas fa-trash"></i></a>';
                                     }
                                     ?>
                                 </td>
