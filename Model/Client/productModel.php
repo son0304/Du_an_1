@@ -12,61 +12,61 @@ class ProductModel
 
     public function listProductModel()
     {
-<<<<<<< HEAD
         $sql = 'SELECT 
-        p.id AS product_id, 
-        p.name AS product_name, 
-        p.description AS product_description, 
-        p.img AS product_image, 
-        c.name AS category_name, 
-        s.name AS size_name, 
-        ps.price AS size_price
+            p.id AS product_id, 
+            p.name AS product_name, 
+            p.description AS product_description, 
+            p.img AS product_image, 
+            c.name AS category_name, 
+            s.id AS size_id,
+            s.name AS size_name, 
+            ps.price AS size_price
         FROM product_sizes ps
         LEFT JOIN products p ON ps.id_product = p.id
         LEFT JOIN sizes s ON ps.id_size = s.id
         LEFT JOIN categories c ON p.id_category = c.id
-        ORDER BY p.id, ps.id_size;
-       ';
+        ORDER BY p.id, ps.id_size;';
+    
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = $result->fetch_all(MYSQLI_ASSOC);
+    
+        // Nhóm sản phẩm theo product_id
+        $products = [];
+        foreach ($rows as $row) {
+            $productId = $row['product_id'];
+    
+            // Nếu sản phẩm chưa có trong danh sách, thêm vào
+            if (!isset($products[$productId])) {
+                $products[$productId] = [
+                    'product_id' => $row['product_id'],
+                    'product_name' => $row['product_name'],
+                    'product_description' => $row['product_description'],
+                    'product_image' => $row['product_image'],
+                    'category_name' => $row['category_name'],
+                    'sizes' => [] // Mảng chứa kích thước của sản phẩm
+                ];
+            }
+    
+            // Thêm kích thước vào mảng 'sizes' của sản phẩm
+            if (!empty($row['size_id'])) {
+                $products[$productId]['sizes'][] = [
+                    'size_id' => $row['size_id'],
+                    'size_name' => $row['size_name'],
+                    'size_price' => $row['size_price']
+                ];
+            }
+        }
+    
+        // Trả về danh sách sản phẩm đã được nhóm
+        return array_values($products);
+    }
+    
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    public function getProductById($id)
-    {
-        $sql = "SELECT * FROM products WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
-    }
 
-    public function getProductByCategory($id_category)
-    {
-        $sql = "SELECT * FROM products WHERE id_category = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id_category);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
 
     public function createProductModel($name, $description, $id_category, $img, $size)
-=======
-        $sql = "SELECT p.id, p.name, p.description, p.img, c.name AS category_name 
-                FROM products p
-                JOIN categories c ON p.id_category = c.id 
-                ORDER BY p.id ASC";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
-
-    // Tạo sản phẩm mới
-    public function createProductModel($name, $description, $id_category, $img, $sizes)
->>>>>>> d709490506bcfa745c16afe845f72aa9422e165a
     {
         $sql = "INSERT INTO products (name, description, id_category, img) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
@@ -104,7 +104,6 @@ class ProductModel
     }
 
     public function getSizeId($size_name)
-<<<<<<< HEAD
     {
         $sql = "SELECT id FROM sizes WHERE name = ?";
         $stmt = $this->conn->prepare($sql);
@@ -114,43 +113,6 @@ class ProductModel
         $row = $result->fetch_assoc();
         return $row ? $row['id'] : null;
     }
-=======
-{
-    $sql = "SELECT id FROM sizes WHERE name = ?";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->bind_param("s", $size_name);
-    $stmt->execute();
-    $stmt->bind_result($id_size);
-    
-    $id_size = null;
-    if ($stmt->fetch()) {
-        return $id_size;
-    }
-
-    return null;
-}
-
-    // Thêm size mới
-    private function insertSize($size_name)
-    {
-        $sql = "INSERT INTO sizes (name) VALUES (?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $size_name);
-        $stmt->execute();
-        return $this->conn->insert_id;
-    }
-
-    // Thêm vào bảng product_sizes
-    private function insertProductSize($id_product, $id_size, $price)
-    {
-        $sql = "INSERT INTO product_sizes (id_product, id_size, price) VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iid", $id_product, $id_size, $price);
-        $stmt->execute();
-    }
-
-    // Lấy danh sách danh mục
->>>>>>> d709490506bcfa745c16afe845f72aa9422e165a
     public function getCategories()
     {
         $sql  = "SELECT*FROM categories";
@@ -160,7 +122,6 @@ class ProductModel
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-<<<<<<< HEAD
     public function detailProductModel($id)
     {
         $sql = "SELECT 
@@ -189,20 +150,6 @@ class ProductModel
     
     
 
-=======
-    // Xóa sản phẩm
-    public function deleteProductModel($id)
-    {
-        $sql = "DELETE FROM product_sizes WHERE id_product = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-
-        $sql = "DELETE FROM products WHERE id = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
-$stmt->execute();
->>>>>>> d709490506bcfa745c16afe845f72aa9422e165a
 
     public function deleteProductModel($id)
     {
@@ -243,7 +190,6 @@ $stmt->execute();
         $stmt->bind_param('i', $id);
         $stmt->execute();
 
-<<<<<<< HEAD
 
         foreach ($size as $size_name => $price) {
             $id_size = $this->getSizeId($size_name);
@@ -264,14 +210,6 @@ $stmt->execute();
             $stmt->execute();
         }
 
-=======
-        if (!empty($sizes) && is_array($sizes)) {
-            foreach ($sizes as $size_name => $price) {
-                $id_size = $this->getSizeId($size_name) ?? $this->insertSize($size_name);
-                $this->insertProductSize($id, $id_size, $price);
-            }
-        }
->>>>>>> d709490506bcfa745c16afe845f72aa9422e165a
         return true;
     }
 }
