@@ -33,7 +33,7 @@ class UserModel
 
     $sql = "INSERT INTO users (name, email, password, phone, address, role) VALUES (?,?,?,?,?,?)";
     $stmt = $this->conn->prepare($sql);
-    $stmt->bind_param('sssisi', $name, $email, $password, $phone, $address, $role); // Sửa 'sssiss' thành 'sssisi'
+    $stmt->bind_param('sssssi', $name, $email, $password, $phone, $address, $role); // Sửa 'sssiss' thành 'sssisi'
 
     if ($stmt->execute()) {
       return true;
@@ -48,7 +48,7 @@ class UserModel
 
     $sql = "UPDATE users SET name = ?, email = ?, password = ?, phone = ?, address = ?, role = ? WHERE id = ?";
     $stmt = $this->conn->prepare($sql);
-    $stmt->bind_param("sssisii", $name, $email, $password, $phone, $address, $role, $id);
+    $stmt->bind_param("sssssii", $name, $email, $password, $phone, $address, $role, $id);
 
     if ($stmt->execute()) {
       return true;
