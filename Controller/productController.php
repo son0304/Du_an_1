@@ -27,42 +27,68 @@ class ProductController
     }
     public function createProduct()
     {
-        // Check if the request method is POST
+        $errors = [];
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Retrieve data from the form
-            $name = $_POST['name'];
-            $description = $_POST['description'];
+            $name = trim($_POST['name']);
+            $description = trim($_POST['description']);
             $id_category = $_POST['id_category'];
 
-            // Process product sizes and prices
+            if (empty($name)) {
+                $errors['name'] = "Tên sản phẩm không được để trống.";
+            }
+
+            if (empty($description)) {
+                $errors['description'] = "Mô tả không được để trống.";
+            }
+
+            if (empty($id_category)) {
+                $errors['id_category'] = "Vui lòng chọn danh mục.";
+            }
+
             $size = [];
-            foreach ($_POST['size']['size'] as $key => $size_name) {
+            foreach ($_POST['size']['size'] as $key => $size_id) {
                 $price = $_POST['size']['price'][$key];
-                if (!empty($size_name) && is_numeric($price)) {
-                    $size[$size_name] = floatval($price);
+                if (!empty($size_id) && is_numeric($price)) {
+                    $size[$size_id] = floatval($price);
+                } else {
+                    $errors['size'] = "Kích cỡ và giá phải hợp lệ (giá là số).";
                 }
             }
+
             $img = "";
             if (!empty($_FILES["img"]["name"])) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                if (!in_array($_FILES["img"]["type"], $allowedTypes)) {
+                    $errors['img'] = "Chỉ chấp nhận định dạng ảnh JPG, JPEG, PNG.";
+                }
+
+                if ($_FILES["img"]["size"] > 2 * 1024 * 1024) {
+                    $errors['img'] = "Ảnh không được vượt quá 2MB.";
+                }
+
                 $targetDir = __DIR__ . "/../../Du_an_1/Assets/image/products/";
                 $imgPath = $targetDir . basename($_FILES["img"]["name"]);
 
-                if (move_uploaded_file($_FILES["img"]["tmp_name"], $imgPath)) {
+                if (empty($errors['img']) && move_uploaded_file($_FILES["img"]["tmp_name"], $imgPath)) {
                     $img = basename($_FILES["img"]["name"]);
-                } else {
-                    $img = "";
+                } elseif (empty($errors['img'])) {
+                    $errors['img'] = "Tải ảnh lên thất bại.";
                 }
             }
 
-            $result = $this->productModel->createProductModel($name, $description, $id_category, $img, $size);
-            if ($result) {
-                header("Location: dashboard.php?action=product");
-                exit();
-            } else {
-                echo "Lỗi khi thêm sản phẩm!";
+            if (empty($errors)) {
+                $result = $this->productModel->createProductModel($name, $description, $id_category, $img, $size);
+                if ($result) {
+                    header("Location: dashboard.php?action=product");
+                    exit();
+                } else {
+                    $errors['general'] = "Lỗi khi thêm sản phẩm!";
+                }
             }
         }
 
+        $sizes = $this->productModel->getSizes();
         $categories = $this->productModel->getCategories();
         include_once __DIR__ . '/../View/Admin/products/createProduct.php';
     }

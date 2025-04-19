@@ -135,8 +135,13 @@ unset($_SESSION['message'], $_SESSION['type']);
                                     <option value="Chuyển khoản" <?= $order['payment'] == 'Chuyển khoản' ? 'selected' : '' ?>>Chuyển khoản</option>
                                 </select>
                             </div>
-
-                            <button type="submit" name="update_order" class="btn btn-primary w-100">Lưu thay đổi</button>
+                            <?php if ($order['status'] === 'chờ xác nhận') : ?>
+                                <form method="post" class="mt-3">
+                                    <input type="hidden" name="status" value="đã huỷ">
+                                    <input type="hidden" name="id_order" value="<?= htmlspecialchars($order['id_order']) ?>">
+                                    <button type="submit" name="update_order" class="btn btn-primary w-100">Lưu thay đổi</button>
+                                </form>
+                            <?php endif ?>
                         </form>
 
                     </div>

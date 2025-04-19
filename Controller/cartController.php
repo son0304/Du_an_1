@@ -18,6 +18,10 @@ class CartController
     }
     public function viewCart()
     {
+        if(!isset($_SESSION['user'])) {
+            header("Location: ../Auth/404.php");
+            exit;
+        }
         $id_user = $_SESSION['user']['id'];
         $id_cart = $this->cartModel->getCartByIdUser($id_user)['id'];
         $carts = $this->cartModel->viewCartModel($id_user);

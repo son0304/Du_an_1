@@ -47,7 +47,7 @@
                                     if ($row['role'] == 1) {
                                       
                                     } else {
-                                        echo '<a href="dashboard.php?action=editUser&id=' . $row['id'] . '" class="btn btn-warning mx-2"><i class="fas fa-edit"></i></a>';
+                                        echo '<a href="dashboard.php?action=updateUser&id=' . $row['id'] . '" class="btn btn-warning mx-2"><i class="fas fa-edit"></i></a>';
                                     }
                                     ?>
                                 </td>
