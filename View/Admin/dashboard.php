@@ -13,7 +13,6 @@ require_once '../Auth/authMiddleware.php';
 
 <body>
 
-   
 </body>
 </html> 
 <body id="page-top">

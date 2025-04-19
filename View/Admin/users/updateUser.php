@@ -31,15 +31,13 @@ if (!isset($user)) {
                         <input type="tel" class="form-control" name="phone" value="<?= $user['phone'] ?>" required>
                     </div>
                     <div class="col-md-6 mb-2">
-                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Địa chỉ</label>
-                        <input type="text" class="form-control" name="address" value="<?= $user['address'] ?>" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label"><i class="fas fa-user-shield"></i> Quyền hạn</label>
-                        <select class="form-select" name="role" required>
-                            <option value="1" <?= $user['role'] == 1 ? 'selected' : '' ?>>Admin</option>
-                            <option value="0" <?= $user['role'] == 0 ? 'selected' : '' ?>>User</option>
-                        </select>
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> Địa chỉ
+                            <input type="text" class="form-control" id="address" name="address" value="<?= $user['address'] ?>" required>
+                            <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="getCurrentLocation()">
+                                <i class="fas fa-location-arrow"></i> Vị trí hiện tại
+                            </button>
+                        </label>
                     </div>
                 </div>
 
@@ -50,3 +48,31 @@ if (!isset($user)) {
         </div>
     </div>
 </body>
+<script>
+    function getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    try {
+                        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+                        const data = await response.json();
+
+                        if (data && data.display_name) {
+                            document.getElementById('address').value = data.display_name;
+                        } else {
+                            alert('Không thể lấy địa chỉ từ vị trí hiện tại.');
+                        }
+                    } catch (error) {
+                        alert('Lỗi khi gọi Nominatim: ' + error.message);
+                    }
+                },
+                function(error) {
+                    alert('Lỗi khi lấy vị trí: ' + error.message);
+                });
+        } else {
+            alert('Trình duyệt không hỗ trợ lấy vị trí!');
+        }
+    }
+</script>
