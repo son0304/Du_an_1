@@ -70,7 +70,7 @@ class OrderController
         $search = $_POST['search'] ?? null;
         $status = $_POST['status'] ?? null;
 
-        $searchFormatted = '%' . trim($search) . '%';
+        $searchFormatted = '%' . ($search) . '%';
 
         if (!empty($search) || !empty($status)) {
             $orders = $this->orderModel->searchOrderByUser($id_user, $searchFormatted, $status);
