@@ -21,7 +21,7 @@
                             <th>Danh mục</th>
                             <th>Size</th>
                             <th>Giá</th>
-                            <th>Action</th>
+                            <!-- <th>Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -48,32 +48,30 @@
                             $sizes = $data['sizes'];
                         ?>
                             <tr class="">
-                                <td rowspan="<?= count($sizes); ?>"><?= ($product_info['product_name']); ?></td>
-                                <td rowspan="<?= count($sizes); ?>"><?= nl2br(($product_info['product_description'])); ?></td>
-                                <td class="" rowspan="<?= count($sizes); ?>">
+                                <td rowspan="<?= count($sizes); ?>"><?= htmlspecialchars($product_info['product_name']); ?></td>
+                                <td rowspan="<?= count($sizes); ?>"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></td>
+                                <td class="text-center" rowspan="<?= count($sizes); ?>">
                                     <img src="/Du_an_1/Assets/image/products/<?= htmlspecialchars($product_info['product_image']) ?>" alt="Ảnh sản phẩm" width="70" height="70" style="border-radius: 8px;">
-
-
                                 </td>
-                                <td rowspan="<?= count($sizes); ?>"><?= ($product_info['category_name']); ?></td>
+                                <td rowspan="<?= count($sizes); ?>"><?= htmlspecialchars($product_info['category_name']); ?></td>
 
                                 <?php foreach ($sizes as $index => $size): ?>
                                     <?php if ($index > 0): ?>
-                            <tr><?php endif; ?>
-                            <td><?= ($size['size_name']); ?></td>
-                            <td><?= number_format($size['size_price'], 0, ',', '.'); ?> VND</td>
+                                        <tr><?php endif; ?>
+                                        <td><?= htmlspecialchars($size['size_name']); ?></td>
+                                        <td><?= number_format($size['size_price'], 0, ',', '.'); ?> VND</td>
 
-                            <?php if ($index === 0): // Chỉ hiển thị nút hành động ở hàng đầu tiên của sản phẩm 
-                            ?>
-                                <td rowspan="<?= count($sizes); ?>">
-                                    <a href="dashboard.php?action=updateProduct&id=<?= $product_info['product_id']; ?>" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> Sửa
-                                    </a>
-                                    <a href="dashboard.php?action=deleteProduct&id=<?= $product_info['product_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">
-                                        <i class="fas fa-trash"></i> Xóa
-                                    </a>
-                                </td>
-                            <?php endif; ?>
+                                        <?php if ($index === 0): // Chỉ hiển thị nút hành động ở hàng đầu tiên của sản phẩm 
+                                        ?>
+                                            <!-- <td rowspan="<?= count($sizes); ?>">
+                                                <a href="dashboard.php?action=updateProduct&id=<?= $product_info['product_id']; ?>" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i> Sửa
+                                                </a>
+                                                <a href="dashboard.php?action=deleteProduct&id=<?= $product_info['product_id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">
+                                                    <i class="fas fa-trash"></i> Xóa
+                                                </a>
+                                            </td> -->
+                                        <?php endif; ?>
 
                             </tr>
                         <?php endforeach; ?>
@@ -84,3 +82,8 @@
         </div>
     </div>
 </div>
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+</style>

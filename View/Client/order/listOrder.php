@@ -1,5 +1,30 @@
+<!-- View/Admin/orders/listOrder.php -->
+
 <div class="container py-5">
     <h2 class="text-primary mb-4">Lịch sử đơn hàng của bạn</h2>
+
+    <div class="border rounded my-4 p-3 bg-white shadow-sm">
+
+        <!-- Form tìm kiếm -->
+        <form method="post" action="" class="d-flex flex-wrap justify-content-center align-items-center pt-3 gap-3">
+
+            <input type="text" name="search" class="form-control w-50" placeholder="Nhập mã đơn hoặc tên người nhận"
+                value="<?= htmlspecialchars($_POST['search'] ?? '') ?>">
+
+            <select name="status" class="form-select w-auto">
+                <option value="">-- Tất cả trạng thái --</option>
+                <option value="chờ xác nhận" <?= (($_POST['status'] ?? '') == 'chờ xác nhận') ? 'selected' : '' ?>>🟥 Chờ xác nhận</option>
+                <option value="đang xử lý" <?= (($_POST['status'] ?? '') == 'đang xử lý') ? 'selected' : '' ?>>🟨 Đang xử lý</option>
+                <option value="đang giao" <?= (($_POST['status'] ?? '') == 'đang giao') ? 'selected' : '' ?>>🟦 Đang giao</option>
+                <option value="hoàn tất" <?= (($_POST['status'] ?? '') == 'hoàn tất') ? 'selected' : '' ?>>🟩 Hoàn tất</option>
+                <option value="đã huỷ" <?= (($_POST['status'] ?? '') == 'đã huỷ') ? 'selected' : '' ?>>⬛ Đã huỷ</option>
+            </select>
+
+            <!-- Nút tìm kiếm -->
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </form>
+
+    </div>
 
     <?php if (!empty($orders)) : ?>
         <?php
@@ -12,17 +37,17 @@
         <?php foreach ($groupedOrders as $orderId => $orderItems):
             $firstItem = $orderItems[0];
 
-            // Định dạng trạng thái với màu sắc
             $status = strtolower($firstItem['status']);
             $statusClasses = [
                 'đã giao' => 'success',
                 'hoàn tất' => 'success',
                 'đang xử lý' => 'warning',
                 'đang giao' => 'info',
-                'đã huỷ' => 'danger',
+                'đã huỷ' => 'secondary',
             ];
-            $badgeClass = $statusClasses[$status] ?? 'secondary';
+            $badgeClass = $statusClasses[$status] ?? 'danger';
         ?>
+
             <div class="card mb-4 shadow-sm border-0">
                 <div class="card-header bg-light d-flex justify-content-between align-items-center">
                     <div>
@@ -64,8 +89,8 @@
         <?php endforeach; ?>
 
     <?php else : ?>
-        <div class="alert alert-info text-center">
-            Bạn chưa có đơn hàng nào. Hãy bắt đầu mua sắm ngay hôm nay!
+        <div class="alert alert-info text-center mt-4">
+            Không tìm thấy đơn hàng nào phù hợp.
         </div>
     <?php endif; ?>
 </div>

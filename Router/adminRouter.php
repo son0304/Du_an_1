@@ -5,6 +5,7 @@ require_once '../../Controller/orderController.php';
 require_once '../../Controller/categoriesController.php';
 require_once '../../Controller/userController.php';
 require_once '../../Controller/settingController.php';
+require_once '../../Controller/statisticController.php';
 
 
 $action = $_GET['action'] ?? 'home';
@@ -13,10 +14,11 @@ $categories = new categoriesController($conn);
 $controllerOrder = new OrderController($conn);
 $controllerUser = new UserController($conn);
 $controllerSetting = new SettingController($conn);
+$controllerStatistic = new StatisticController($conn);
 
 switch ($action) {
     case 'home':
-        require_once '../../View/Admin/masters/master.php';
+        $controllerStatistic->listStatisticStatus();
         break;
     // User Management
     case 'users':

@@ -1,14 +1,17 @@
+<?php
+$message = $_SESSION['message'] ?? null;
+$type = $_SESSION['type'] ?? null;
+unset($_SESSION['message'], $_SESSION['type']);
+?>
 <div class="container py-5 position-relative">
     <h2 class="text-center mb-4 text-primary">Danh sách sản phẩm</h2>
 
-    <!-- Thanh tìm kiếm sản phẩm -->
     <div class="row justify-content-center mb-2">
         <div class="col-md-6 position-relative">
             <input type="text" id="productSearchInput" class="form-control" placeholder="🔍 Tìm kiếm sản phẩm...">
         </div>
     </div>
 
-    <!-- Bộ lọc danh mục: căn trái đúng lề của ô tìm kiếm và có cuộn -->
     <div class="row mb-3">
         <div class="col-md-6 offset-md-3">
             <!-- Nút mở bộ lọc -->
@@ -236,6 +239,25 @@
 
 <!-- JS -->
 <script>
+    <?php if (isset($message)): ?>
+
+        Swal.fire({
+            icon: '<?php echo $type; ?>',
+            title: '<?php echo $message; ?>',
+            showConfirmButton: true,
+            position: 'top',
+            toast: true,
+            timer: 3000,
+            timerProgressBar: true,
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
+    <?php endif; ?>
+
     const slider = document.getElementById('sliderContainer');
     const scrollAmount = slider.querySelector('.product-card')?.offsetWidth || 300;
 

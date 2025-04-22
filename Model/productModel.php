@@ -33,6 +33,17 @@ class ProductModel
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function getProductByCart($id)
+    {
+        $sql = "SELECT * FROM products WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getProductById($id)
     {
         $sql = "SELECT * FROM products WHERE id = ?";
@@ -54,6 +65,7 @@ class ProductModel
     }
 
     public function createProductModel($name, $description, $id_category, $img, $size)
+
     {
         $sql = "INSERT INTO products (name, description, id_category, img) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
@@ -100,6 +112,7 @@ class ProductModel
         $row = $result->fetch_assoc();
         return $row ? $row['id'] : null;
     }
+
     public function getCategories()
     {
         $sql  = "SELECT*FROM categories";
@@ -109,6 +122,40 @@ class ProductModel
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getSizes()
+    {
+        $sql  = "SELECT*FROM sizes";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function detailProductModel($id)
+    {
+        $sql = "SELECT 
+                    p.id AS product_id, 
+                    p.name AS product_name, 
+                    p.description AS product_description, 
+                    p.img AS product_image, 
+                    c.name AS category_name, 
+                    s.id AS size_id,
+                    s.name AS size_name, 
+                    ps.price AS size_price
+                FROM products p
+                JOIN categories c ON p.id_category = c.id
+                JOIN product_sizes ps ON p.id = ps.id_product
+                JOIN sizes s ON ps.id_size = s.id
+                WHERE p.id = ?
+                ORDER BY s.id;";
+    
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
 
     public function deleteProductModel($id)
     {
@@ -168,6 +215,7 @@ class ProductModel
             $stmt->bind_param("iid", $id, $id_size, $price);
             $stmt->execute();
         }
+
 
         return true;
     }

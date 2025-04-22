@@ -9,37 +9,31 @@
 </head>
 
 <body>
-
     <div class="container py-5">
-        <form action="" method="post">
+        <form action="" method="post" id="orderForm">
             <div class="row g-4">
-                <!-- Danh sách sản phẩm -->
+                <!-- Thông tin sản phẩm -->
                 <div class="col-lg-8">
                     <div class="card p-4">
                         <h4 class="text-center text-primary mb-4">Thông tin sản phẩm</h4>
-
-                        <?php foreach ($products as $product) : ?>
+                        <?php foreach ($products as $product) : 
+                            $quantity = isset($_GET['id_cart']) ? $product['quantity'] : 1;
+                            $price = $product['price'];
+                        ?>
                             <div class="row align-items-center mb-3 border-bottom pb-3">
                                 <div class="col-3">
                                     <img src="/Du_an_1/Assets/image/products/<?= htmlspecialchars($product['img']) ?>" alt="Ảnh sản phẩm" class="img-fluid rounded">
                                 </div>
                                 <div class="col-9">
-                                    <h6 class="mb-1"><?= htmlspecialchars($product['name']) ?></h6>
+                                    <h6><?= htmlspecialchars($product['name']) ?></h6>
                                     <p class="text-danger fw-bold mb-2">Giá: <?= number_format($price, 0, ',', '.') ?> ₫</p>
-                                    <div class="mb-2">
+                                    <div>
                                         <label for="quantity_<?= $product['id'] ?>" class="form-label">Số lượng</label>
-                                        <input type="number"
-                                            name="quantity[<?= $product['id'] ?>]"
-                                            id="quantity_<?= $product['id'] ?>"
-                                            class="form-control form-control-sm w-50 quantity-input"
-                                            min="1"
-                                            value="1"
-                                            data-price="<?= $price ?>">
+                                        <input type="number" name="quantity[]" id="quantity_<?= $product['id'] ?>" class="form-control form-control-sm w-50 quantity-input" min="1" value="<?= $quantity ?>" data-price="<?= $price ?>">
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-
                     </div>
                 </div>
 
@@ -50,71 +44,57 @@
 
                         <div class="mb-3">
                             <label for="name" class="form-label">Họ và Tên</label>
-                            <input type="text" id="name" name="name" placeholder="Nhập tên" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Nhập tên" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="phone" class="form-label">Số điện thoại</label>
-                            <input type="tel" id="phone" name="phone" placeholder="Nhập số điện thoại" class="form-control" required>
+                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nhập số điện thoại" required>
+                            <div id="phoneError" class="text-danger d-none">Số điện thoại không hợp lệ. Vui lòng nhập lại!</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="address" class="form-label">Địa chỉ</label>
-                            <input type="text" id="address" name="address" placeholder="Nhập địa chỉ" class="form-control" required>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Nhập địa chỉ" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="received_date" class="form-label">Ngày nhận</label>
                             <input type="date" id="received_date" name="received_date" class="form-control" required>
+                            <div id="dateError" class="text-danger d-none">Không được đặt cho quá khứ</div>
                         </div>
 
                         <div class="mb-3">
                             <label for="received_time" class="form-label">Giờ nhận</label>
-                            <select id="received_time" name="received_time" class="form-select" required>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                                <option value="18:00">18:00</option>
-                                <option value="19:00">19:00</option>
-                                <option value="20:00">20:00</option>
-                                <option value="21:00">21:00</option>
-                            </select>
+                            <div class="d-flex align-items-center">
+                                <input type="time" id="received_time" name="received_time" class="form-control me-2" required>
+                                <span class="input-group-text">Giờ</span>
+                            </div>
+                            <div id="timeError" class="text-danger d-none mt-2">Thời gian nhận bánh từ 8-21h và cách hiện tại ít nhất 1 tiếng!</div>
                         </div>
 
-                        <!-- Hình thức thanh toán -->
                         <div class="mb-3">
                             <label class="form-label d-block">Hình thức thanh toán</label>
-                            <div class="d-flex justify-content-between">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment" id="cod" value="COD" checked>
-                                    <label class="form-check-label" for="cod"> (COD)</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="payment" id="bank" value="BANK">
-                                    <label class="form-check-label" for="bank">Chuyển khoản</label>
-                                </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="payment" id="cod" value="COD" checked>
+                                <label class="form-check-label" for="cod">COD</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="payment" id="bank" value="BANK">
+                                <label class="form-check-label" for="bank">Chuyển khoản</label>
                             </div>
                         </div>
 
-                        <!-- Thông tin chuyển khoản -->
                         <div id="bankInfo" class="alert alert-info d-none">
-                            <p class="mb-1"><strong>Thông tin chuyển khoản:</strong></p>
-                            <ul class="mb-0">
+                            <strong>Thông tin chuyển khoản:</strong>
+                            <ul>
                                 <li>Ngân hàng: Vietcombank</li>
                                 <li>Số tài khoản: 0123456789</li>
                                 <li>Chủ tài khoản: Nguyễn Văn A</li>
-                                <li>Nội dung chuyển khoản: <strong>SDT + Tên</strong></li>
+                                <li>Nội dung: <strong>SDT + Tên</strong></li>
                             </ul>
                         </div>
 
-                        <!-- Tổng tiền -->
                         <div class="mb-3">
                             <strong class="text-danger">Tổng tiền: <span id="totalPriceText">0</span> VND</strong>
                         </div>
@@ -126,44 +106,113 @@
         </form>
     </div>
 
-    <!-- JavaScript tính tổng tiền và hiển thị hình thức thanh toán -->
     <script>
-        function formatCurrency(number) {
-            return number.toLocaleString('vi-VN');
-        }
-
+        // Cập nhật tổng tiền
         function updateTotalPrice() {
-            const quantityInputs = document.querySelectorAll('.quantity-input');
+            const inputs = document.querySelectorAll('.quantity-input');
             let total = 0;
-
-            quantityInputs.forEach(input => {
+            inputs.forEach(input => {
                 const price = parseFloat(input.dataset.price);
                 const quantity = parseInt(input.value) || 0;
                 total += price * quantity;
             });
-
-            document.getElementById('totalPriceText').textContent = formatCurrency(total);
+            document.getElementById('totalPriceText').textContent = total.toLocaleString('vi-VN');
         }
 
-        document.querySelectorAll('.quantity-input').forEach(input => {
-            input.addEventListener('input', updateTotalPrice);
-        });
+        // Hiển thị thông tin chuyển khoản nếu chọn BANK
+        function toggleBankInfo() {
+            document.getElementById('bankInfo').classList.toggle('d-none', !document.getElementById('bank').checked);
+        }
 
-        updateTotalPrice();
+        // Kiểm tra số điện thoại
+        function validatePhone(phone) {
+            return /^(0[3|5|7|8|9])\d{8}$/.test(phone);
+        }
 
-        // Hiển thị thông tin chuyển khoản nếu chọn hình thức chuyển khoản
-        const codRadio = document.getElementById('cod');
-        const bankRadio = document.getElementById('bank');
-        const bankInfo = document.getElementById('bankInfo');
+        // Kiểm tra ngày không phải quá khứ
+        function validateDate(date) {
+            const today = new Date();
+            const selected = new Date(date);
+            today.setHours(0, 0, 0, 0);
+            selected.setHours(0, 0, 0, 0);
+            return selected >= today;
+        }
 
-        codRadio.addEventListener('change', () => {
-            bankInfo.classList.add('d-none');
-        });
+        // Kiểm tra giờ đặt hợp lệ
+        function validateTime(time, dateStr) {
+            const [h, m] = time.split(':');
+            const now = new Date();
+            const selectedTime = new Date(`${dateStr}T${h}:${m}`);
+            const selectedHour = selectedTime.getHours();
+            if (selectedHour < 8 || selectedHour >= 21) return false;
+            if (dateStr === now.toISOString().split('T')[0]) {
+                return selectedTime.getTime() >= now.getTime() + 3600000;
+            }
+            return true;
+        }
 
-        bankRadio.addEventListener('change', () => {
-            bankInfo.classList.remove('d-none');
+        // Sự kiện DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTotalPrice();
+            toggleBankInfo();
+
+            document.querySelectorAll('.quantity-input').forEach(input =>
+                input.addEventListener('input', updateTotalPrice)
+            );
+
+            document.querySelectorAll('[name="payment"]').forEach(radio =>
+                radio.addEventListener('change', toggleBankInfo)
+            );
+
+            document.getElementById('orderForm').addEventListener('submit', (e) => {
+                let valid = true;
+
+                const phone = document.getElementById('phone').value;
+                if (!validatePhone(phone)) {
+                    document.getElementById('phoneError').classList.remove('d-none');
+                    valid = false;
+                } else {
+                    document.getElementById('phoneError').classList.add('d-none');
+                }
+
+                const date = document.getElementById('received_date').value;
+                if (!validateDate(date)) {
+                    document.getElementById('dateError').classList.remove('d-none');
+                    valid = false;
+                } else {
+                    document.getElementById('dateError').classList.add('d-none');
+                }
+
+                const time = document.getElementById('received_time').value;
+                if (!validateTime(time, date)) {
+                    document.getElementById('timeError').classList.remove('d-none');
+                    valid = false;
+                } else {
+                    document.getElementById('timeError').classList.add('d-none');
+                }
+
+                if (!valid) e.preventDefault();
+            });
         });
     </script>
+
+    <!-- Nếu có thông báo từ PHP -->
+    <?php if (isset($message)) : ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: '<?= $type ?>',
+                title: '<?= $message ?>',
+                toast: true,
+                position: 'top',
+                timer: 3000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+                showClass: { popup: 'animate__animated animate__fadeInDown' },
+                hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+            });
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>
