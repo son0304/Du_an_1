@@ -113,6 +113,31 @@ class OrderModel
 
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+    public function searchOrder($search, $status = null)
+    {
+        // ⚠️ Thay 'name' nếu tên cột người nhận là khác
+        $sql = "SELECT * FROM orders WHERE (CAST(id AS CHAR) LIKE ? OR name LIKE ?)";
+
+        if (!empty($status)) {
+            $sql .= " AND status = ?";
+        }
+
+        $sql .= " ORDER BY received_date ASC, received_time ASC";
+
+        if (!empty($status)) {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sss", $search, $search, $status);
+        } else {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ss", $search, $search);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
     public function searchOrderByUser($id_user, $search, $status = null)
     {
         $sql = "SELECT 

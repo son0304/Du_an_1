@@ -26,7 +26,17 @@ class OrderController
     // Liệt kê tất cả các đơn hàng (Admin)
     function listOrders()
     {
-        $orders = $this->orderModel->listOrderModel();
+        $search = $_POST['search'] ?? null;
+        $status = $_POST['status'] ?? null;
+
+        $searchFormatted = '%' . ($search) . '%';
+
+        if (!empty($search) || !empty($status)) {
+            $orders = $this->orderModel->searchOrder($searchFormatted, $status);
+        } else {
+            $orders = $this->orderModel->listOrderModel();
+        }
+
         include_once __DIR__ . '/../View/Admin/orders/listOrder.php';
     }
 
