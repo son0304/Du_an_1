@@ -6,7 +6,7 @@ $productModel = new ProductModel($conn);
 
 $product = $productModel->listProductModel();
 
-
+$categories = $productModel->getCategories();
 ?>
 
 <section class="container my-5">
@@ -282,46 +282,75 @@ $product = $productModel->listProductModel();
     </script>
 </section>
 <section class="container my-5">
-    <h3 class="text-center text-success fw-bold mb-4">💬 Đánh giá từ khách hàng</h3>
+    <h3 class="text-center text-success fw-bold mb-4">🚚 Chính sách giao hàng & chăm sóc khách hàng</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+        <div class="col">
+            <div class="card h-100 shadow-sm p-4">
+                <i class="bi bi-truck fs-1 text-primary mb-3"></i>
+                <h5 class="fw-bold">Giao hàng nhanh chóng</h5>
+                <p>Miễn phí vận chuyển trong bán kính 5km và hỗ trợ giao gấp trong ngày theo yêu cầu.</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm p-4">
+                <i class="bi bi-shield-check fs-1 text-success mb-3"></i>
+                <h5 class="fw-bold">Cam kết chất lượng</h5>
+                <p>Bánh làm từ nguyên liệu tươi, không chất bảo quản, đảm bảo an toàn vệ sinh thực phẩm.</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow-sm p-4">
+                <i class="bi bi-emoji-smile fs-1 text-warning mb-3"></i>
+                <h5 class="fw-bold">Hỗ trợ tận tâm</h5>
+                <p>Đội ngũ nhân viên sẵn sàng tư vấn và phục vụ khách hàng mọi lúc, mọi nơi.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container my-5">
+    <h3 class="text-center text-danger fw-bold mb-4">📍 Hệ Thống Cửa Hàng</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        <!-- Cửa hàng 1 -->
         <div class="col">
-            <div class="card h-100 shadow-sm p-3">
-                <p>“Bánh rất ngon, giao hàng đúng giờ, bé nhà mình rất thích!”</p>
-                <div class="d-flex align-items-center mt-3">
-                    <img src="https://picsum.photos/200" class="rounded-circle me-3" width="50" alt="Lan Anh">
-                    <div>
-                        <strong>Lan Anh</strong><br>
-                        ⭐⭐⭐⭐⭐
-                    </div>
-                </div>
+            <div class="border rounded p-3 shadow-sm h-100">
+                <h5 class="fw-bold">Savor Cake Nguyễn Chánh</h5>
+                <p><i class="bi bi-clock me-2 text-primary"></i><strong>Giờ mở cửa:</strong> 8h - 22h T2-CN</p>
+                <p><i class="bi bi-telephone me-2 text-success"></i><strong>Điện thoại:</strong> 091 708 6650 (Tư vấn)</p>
+                <p><i class="bi bi-geo-alt me-2 text-danger"></i><strong>Địa chỉ:</strong> 22 Nguyễn Chánh, Trung Hòa, Cầu Giấy</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=22+Nguyễn+Chánh,+Trung+Hòa,+Cầu+Giấy" target="_blank" class="btn btn-outline-primary btn-sm mt-2">
+                    <i class="bi bi-map"></i> Xem chỉ đường
+                </a>
             </div>
         </div>
 
+        <!-- Cửa hàng 2 -->
         <div class="col">
-            <div class="card h-100 shadow-sm p-3">
-                <p>“Trang trí bánh đẹp mắt, đúng như mẫu mình yêu cầu. Sẽ ủng hộ dài lâu.”</p>
-                <div class="d-flex align-items-center mt-3">
-                    <img src="https://picsum.photos/id/237/200" class="rounded-circle me-3" width="50" alt="Minh Khoa">
-                    <div>
-                        <strong>Minh Khoa</strong><br>
-                        ⭐⭐⭐⭐⭐
-                    </div>
-                </div>
+            <div class="border rounded p-3 shadow-sm h-100">
+                <h5 class="fw-bold">Savor Cake Hoàng Đạo Thúy</h5>
+                <p><i class="bi bi-clock me-2 text-primary"></i><strong>Giờ mở cửa:</strong> 8h - 22h T2-CN</p>
+                <p><i class="bi bi-telephone me-2 text-success"></i><strong>Điện thoại:</strong> 091 234 5678 (Đặt bánh)</p>
+                <p><i class="bi bi-geo-alt me-2 text-danger"></i><strong>Địa chỉ:</strong> 85 Hoàng Đạo Thúy, Trung Hòa, Cầu Giấy</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=85+Hoàng+Đạo+Thúy,+Trung+Hòa,+Cầu+Giấy" target="_blank" class="btn btn-outline-primary btn-sm mt-2">
+                    <i class="bi bi-map"></i> Xem chỉ đường
+                </a>
             </div>
         </div>
 
+        <!-- Cửa hàng 3 -->
         <div class="col">
-            <div class="card h-100 shadow-sm p-3">
-                <p>“Mình đặt combo sinh nhật, giá hợp lý, bánh ngon, bé vui lắm luôn 😍”</p>
-                <div class="d-flex align-items-center mt-3">
-                    <img src="https://picsum.photos/seed/picsum/200" class="rounded-circle me-3" width="50" alt="Thảo Nguyên">
-                    <div>
-                        <strong>Thảo Nguyên</strong><br>
-                        ⭐⭐⭐⭐⭐
-                    </div>
-                </div>
+            <div class="border rounded p-3 shadow-sm h-100">
+                <h5 class="fw-bold">Savor Cake Hà Đông</h5>
+                <p><i class="bi bi-clock me-2 text-primary"></i><strong>Giờ mở cửa:</strong> 9h - 21h T2-CN</p>
+                <p><i class="bi bi-telephone me-2 text-success"></i><strong>Điện thoại:</strong> 098 765 4321 (Hỗ trợ)</p>
+                <p><i class="bi bi-geo-alt me-2 text-danger"></i><strong>Địa chỉ:</strong> 123 Quang Trung, Hà Đông, Hà Nội</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=123+Quang+Trung,+Hà+Đông,+Hà+Nội" target="_blank" class="btn btn-outline-primary btn-sm mt-2">
+                    <i class="bi bi-map"></i> Xem chỉ đường
+                </a>
             </div>
         </div>
+
     </div>
 </section>
 

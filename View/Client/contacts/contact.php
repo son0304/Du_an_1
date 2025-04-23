@@ -44,31 +44,38 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <form id="contact-form" action="" method="post">
+                            <form action="" method="post">
                                 <div class="row g-3"> <!-- thêm spacing gọn gàng hơn -->
                                     <div class="col-lg-6">
                                         <fieldset>
-                                            <input type="text" name="name" id="name" placeholder="Họ và tên" autocomplete="on" required class="form-control">
+                                            <input type="text" name="fullname" placeholder="Họ và tên" autocomplete="on" required class="form-control">
                                         </fieldset>
                                     </div>
                                     <div class="col-lg-6">
                                         <fieldset>
-                                            <input type="text" name="phone" id="phone" placeholder="Số điện thoại" autocomplete="on" required class="form-control">
+                                            <input type="text" name="phone" placeholder="Số điện thoại" autocomplete="on" required class="form-control">
                                         </fieldset>
                                     </div>
                                     <div class="col-lg-12">
                                         <fieldset>
-                                            <input type="email" name="email" id="email" placeholder="Email của bạn" required class="form-control">
+                                            <input type="email" name="email" placeholder="Email của bạn" required class="form-control">
                                         </fieldset>
                                     </div>
                                     <div class="col-lg-12">
                                         <fieldset>
-                                            <input type="text" name="subject" id="subject" placeholder="Chủ đề liên hệ" autocomplete="on" class="form-control">
+                                            <select name="title" class="form-control" required>
+                                                <option value="" disabled selected>Chọn chủ đề liên hệ</option>
+                                                <option value="Đặt bánh theo yêu cầu">Đặt bánh theo yêu cầu</option>
+                                                <option value="Tư vấn thiết kế bánh">Tư vấn thiết kế bánh</option>
+                                                <option value="Hỗ trợ đơn hàng">Hỗ trợ đơn hàng</option>
+                                                <option value="Góp ý & phản hồi">Góp ý & phản hồi</option>
+                                                <option value="Khác">Khác</option>
+                                            </select>
                                         </fieldset>
                                     </div>
                                     <div class="col-lg-12">
                                         <fieldset>
-                                            <textarea name="message" id="message" placeholder="Nội dung tin nhắn của bạn..." rows="5" class="form-control"></textarea>
+                                            <textarea name="description" placeholder="Nội dung tin nhắn của bạn..." rows="5" class="form-control"></textarea>
                                         </fieldset>
                                     </div>
                                     <div class="col-lg-12 d-flex justify-content-center">

@@ -5,7 +5,9 @@ require_once '../../Controller/orderController.php';
 require_once '../../Controller/categoriesController.php';
 require_once '../../Controller/userController.php';
 require_once '../../Controller/settingController.php';
+require_once '../../Controller/contactController.php';
 require_once '../../Controller/statisticController.php';
+
 
 
 $action = $_GET['action'] ?? 'home';
@@ -14,6 +16,7 @@ $categories = new categoriesController($conn);
 $controllerOrder = new OrderController($conn);
 $controllerUser = new UserController($conn);
 $controllerSetting = new SettingController($conn);
+$controllerContact = new ContactController($conn);
 $controllerStatistic = new StatisticController($conn);
 
 switch ($action) {
@@ -77,6 +80,17 @@ switch ($action) {
         break;
     case 'updateSetting':
         $controllerSetting->updateSetting();
+        break;
+
+    //Contacts
+    case 'contacts':
+        $controllerContact->viewContact();
+        break;
+    case 'updateContact':
+        $controllerContact->updateContactStatus();
+        break;
+    case 'deleteContact':
+        $controllerContact->deleteContact();
         break;
     default:
         echo "Chào mừng đến với trang quản trị!";
