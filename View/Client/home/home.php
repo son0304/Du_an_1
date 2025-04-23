@@ -80,7 +80,7 @@ $categories = $productModel->getCategories();
                             data-sizes='<?= json_encode($sizes) ?>'>
                         <div class="card-body flex-grow-1 d-flex flex-column">
                             <h5 class="card-title fw-bold"><?= htmlspecialchars($product_info['product_name']); ?></h5>
-                            <p class="card-text"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></p>
+                            <p class="card-text d-none"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></p>
                             <div class="mt-auto">
                                 <p class="fw-bold text-danger mb-2">Giá:
                                     <span id="price-<?= $product_id; ?>">

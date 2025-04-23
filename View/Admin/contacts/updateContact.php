@@ -28,7 +28,7 @@
     <div class="card shadow">
         <div class="card-body">
             <p><strong>Tiêu đề:</strong> <?= htmlspecialchars($contacts['title'] ?? '') ?></p>
-            <p><?= nl2br(htmlspecialchars($contacts['description'] ?? '')) ?></p>
+            <p><strong>Yêu cầu:</strong><br><?= nl2br(htmlspecialchars($contacts['description'] ?? '')) ?></p>
         </div>
     </div>
 </div>
