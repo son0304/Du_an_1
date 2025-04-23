@@ -28,8 +28,9 @@ class ContactController
             $phone = $_POST['phone'];
             $title = $_POST['title'];
             $description = $_POST['description'];
+            $status = 'Chờ xác nhận';
 
-            $this->contactModel->addContact($id_user, $id_contact, $fullname, $email, $phone, $title, $description);
+            $this->contactModel->addContact($id_user, $id_contact, $fullname, $email, $phone, $title, $description, $status);
 
             header("Location: /Du_an_1/View/Client/index.php?action=contact");
             exit();

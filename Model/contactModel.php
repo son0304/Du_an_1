@@ -20,11 +20,11 @@ class ContactModel
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function addContact($id_user, $id_contact, $fullname, $email, $phone, $title, $description)
+    public function addContact($id_user, $id_contact, $fullname, $email, $phone, $title, $description, $status)
     {
-        $sql = 'INSERT INTO contact_items (id_contact, fullname, email, phone, title, description) VALUES (?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO contact_items (id_contact, fullname, email, phone, title, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('isssss', $id_contact, $fullname, $email, $phone, $title, $description);
+        $stmt->bind_param('issssss', $id_contact, $fullname, $email, $phone, $title, $description, $status);
         $stmt->execute();
     }
 
