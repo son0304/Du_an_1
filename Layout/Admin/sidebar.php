@@ -23,20 +23,20 @@
     <li class="nav-item">
         <a class="nav-link" href="dashboard.php?action=users">
             <i class=" fas fa-solid fa-users"></i>
-            <span>User</span></a>
+            <span>Users</span></a>
     </li>
 
     <li class="nav-item">
         <a class="nav-link" href="dashboard.php?action=orders">
             <i class="fas fa-receipt"></i>
-            <span>Order</span></a>
+            <span>Orders</span></a>
     </li>
 
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fa-solid fa-cake-candles"></i>
+            <i class="fas fa-birthday-cake"></i>
             <span>Products</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
