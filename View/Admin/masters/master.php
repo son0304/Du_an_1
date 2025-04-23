@@ -1,307 +1,238 @@
-<div class="container-fluid">
+<!DOCTYPE html>
+<html lang="vi">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+<head>
+  <meta charset="UTF-8">
+  <title>Thống kê Doanh thu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Thẻ thống kê */
+    .stat-card {
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+    }
+
+    /* Biểu đồ */
+    .chart-container {
+      margin-top: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-tab {
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <?php
+  function getRevenueFromStat($statArray)
+  {
+    return !empty($statArray) ? (float)($statArray[0]['total_price'] ?? 0) : 0;
+  }
+
+  $todayRevenue = getRevenueFromStat($statByDay);
+  $yesterdayRevenue = getRevenueFromStat($statByDayPrevious);
+
+  $weekRevenue = getRevenueFromStat($statByWeek);
+  $lastWeekRevenue = getRevenueFromStat($statByWeekPrevious);
+
+  $monthRevenue = getRevenueFromStat($statByMonth);
+  $lastMonthRevenue = getRevenueFromStat($statByMonthPrevious);
+
+  $yearRevenue = getRevenueFromStat($statByYear);
+  $lastYearRevenue = getRevenueFromStat($statByYearPrevious);
+  ?>
+
+  <div class="container py-5">
+    <h2 class="text-center mb-4">📊 Thống kê Doanh thu</h2>
+    <div class="container mb-4">
+      <form action="" method="post" class="row g-3 align-items-center justify-content-center">
+        <div class="col-md-4">
+          <input type="date" name="date" id="start-date" class="form-control" required>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-success btn-lg px-4 py-2">Lọc</button>
+        </div>
+      </form>
     </div>
 
-    <!-- Content Row -->
-    <div class="row">
-
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Thẻ thống kê -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-3">
+        <div class="card stat-card text-white bg-primary text-center">
+          <div class="card-body">
+            <h5 class="card-title">Ngày <?= date("d/m/Y", strtotime($date)) ?></h5>
+            <p class="fs-5 mb-1"><?= number_format($todayRevenue) ?> ₫</p>
+            <small class="text-light">Hôm qua: <?= date("d/m/Y", strtotime($previousDay)) ?> – <?= number_format($yesterdayRevenue) ?> ₫</small>
+          </div>
         </div>
+      </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Earnings (Annual)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="col-md-3">
+        <div class="card stat-card text-white bg-success text-center">
+          <div class="card-body">
+            <h5 class="card-title">Tuần <?= date("W", strtotime($date)) ?> (<?= date("d/m", strtotime('monday this week', strtotime($date))) ?> - <?= date("d/m", strtotime('sunday this week', strtotime($date))) ?>)</h5>
+            <p class="fs-5 mb-1"><?= number_format($weekRevenue) ?> ₫</p>
+            <small class="text-light">Tuần trước: <?= number_format($lastWeekRevenue) ?> ₫</small>
+          </div>
         </div>
+      </div>
 
-        <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="col-md-3">
+        <div class="card stat-card text-white bg-warning text-center">
+          <div class="card-body">
+            <h5 class="card-title">Tháng <?= date("m/Y", strtotime($date)) ?></h5>
+            <p class="fs-5 mb-1"><?= number_format($monthRevenue) ?> ₫</p>
+            <small class="text-light">Tháng trước: <?= number_format($lastMonthRevenue) ?> ₫</small>
+          </div>
         </div>
+      </div>
 
-        <!-- Pending Requests Card Example -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Requests</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="col-md-3">
+        <div class="card stat-card text-white bg-danger text-center">
+          <div class="card-body">
+            <h5 class="card-title">Năm <?= date("Y", strtotime($date)) ?></h5>
+            <p class="fs-5 mb-1"><?= number_format($yearRevenue) ?> ₫</p>
+            <small class="text-light">Năm trước: <?= number_format($lastYearRevenue) ?> ₫</small>
+          </div>
         </div>
+      </div>
     </div>
 
-    <!-- Content Row -->
+    <!-- Biểu đồ so sánh -->
+    <h5 class="mb-3">📈 Biểu đồ so sánh:</h5>
+    <ul class="nav nav-tabs" id="chartTab" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#chart-day">Ngày</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#chart-week">Tuần</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#chart-month">Tháng</button></li>
+      <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#chart-year">Năm</button></li>
+    </ul>
 
-    <div class="row">
-
-        <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Dropdown Header:</div>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Dropdown Header:</div>
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Direct
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Social
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Referral
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="tab-content chart-container">
+      <div class="tab-pane fade show active" id="chart-day">
+        <canvas id="chartDay"></canvas>
+      </div>
+      <div class="tab-pane fade" id="chart-week">
+        <canvas id="chartWeek"></canvas>
+      </div>
+      <div class="tab-pane fade" id="chart-month">
+        <canvas id="chartMonth"></canvas>
+      </div>
+      <div class="tab-pane fade" id="chart-year">
+        <canvas id="chartYear"></canvas>
+      </div>
     </div>
+  </div>
 
-    <!-- Content Row -->
-    <div class="row">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        <!-- Content Column -->
-        <div class="col-lg-6 mb-4">
+  <script>
+    const chartConfigs = [{
+        id: 'chartDay',
+        title: 'So sánh doanh thu hôm nay (<?= date("d/m/Y") ?>) và hôm qua (<?= date("d/m/Y", strtotime("-1 day")) ?>)',
+        labels: ['<?= date("d/m", strtotime("-1 day")) ?>', '<?= date("d/m") ?>'],
+        data: [<?= $yesterdayRevenue ?>, <?= $todayRevenue ?>],
+        bgColor: ['#cbd5e1', '#3b82f6'],
+        yMax: 5000000
+      },
+      {
+        id: 'chartWeek',
+        title: 'So sánh doanh thu tuần này (<?= date("W") ?>) và tuần trước (<?= date("W", strtotime("-1 week")) ?>)',
+        labels: ['Tuần <?= date("W", strtotime("-1 week")) ?>', 'Tuần <?= date("W") ?>'],
+        data: [<?= $lastWeekRevenue ?>, <?= $weekRevenue ?>],
+        bgColor: ['#d1fae5', '#10b981'],
+        yMax: 20000000
+      },
+      {
+        id: 'chartMonth',
+        title: 'So sánh doanh thu tháng <?= date("m") ?> và tháng <?= date("m", strtotime("-1 month")) ?>',
+        labels: ['Tháng <?= date("m", strtotime("-1 month")) ?>', 'Tháng <?= date("m") ?>'],
+        data: [<?= $lastMonthRevenue ?>, <?= $weekRevenue ?>],
+        bgColor: ['#fde68a', '#f59e0b'],
+        yMax: 100000000
+      },
+      {
+        id: 'chartYear',
+        title: 'So sánh doanh thu năm <?= date("Y") ?> và năm <?= date("Y", strtotime("-1 year")) ?>',
+        labels: ['<?= date("Y", strtotime("-1 year")) ?>', '<?= date("Y") ?>'],
+        data: [<?= $lastYearRevenue ?>, <?= $yearRevenue ?>],
+        bgColor: ['#fecaca', '#dc2626'],
+        yMax: 2000000000
+      }
+    ];
 
-            <!-- Project Card Example -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                </div>
-                <div class="card-body">
-                    <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
-                    <div class="progress mb-4">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
-                    <div class="progress mb-4">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Customer Database <span class="float-right">60%</span></h4>
-                    <div class="progress mb-4">
-                        <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
-                    <div class="progress mb-4">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span></h4>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-            </div>
+    chartConfigs.forEach(({
+      id,
+      title,
+      labels,
+      data,
+      bgColor,
+      yMax
+    }) => {
+      const ctx = document.getElementById(id).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Doanh thu (₫)',
+            data,
+            backgroundColor: bgColor,
+            borderRadius: 10,
+            barThickness: 40
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: title,
+              font: {
+                size: 16
+              },
+              color: '#111'
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return new Intl.NumberFormat('vi-VN').format(context.raw) + ' ₫';
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: yMax,
+              ticks: {
+                callback: function(value) {
+                  return new Intl.NumberFormat('vi-VN').format(value) + ' ₫';
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
 
-            <!-- Color System -->
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-primary text-white shadow">
-                        <div class="card-body">
-                            Primary
-                            <div class="text-white-50 small">#4e73df</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-success text-white shadow">
-                        <div class="card-body">
-                            Success
-                            <div class="text-white-50 small">#1cc88a</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-info text-white shadow">
-                        <div class="card-body">
-                            Info
-                            <div class="text-white-50 small">#36b9cc</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-warning text-white shadow">
-                        <div class="card-body">
-                            Warning
-                            <div class="text-white-50 small">#f6c23e</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-danger text-white shadow">
-                        <div class="card-body">
-                            Danger
-                            <div class="text-white-50 small">#e74a3b</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-secondary text-white shadow">
-                        <div class="card-body">
-                            Secondary
-                            <div class="text-white-50 small">#858796</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-light text-black shadow">
-                        <div class="card-body">
-                            Light
-                            <div class="text-black-50 small">#f8f9fc</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <div class="card bg-dark text-white shadow">
-                        <div class="card-body">
-                            Dark
-                            <div class="text-white-50 small">#5a5c69</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
-        </div>
-
-        <div class="col-lg-6 mb-4">
-
-            <!-- Illustrations -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                </div>
-                <div class="card-body">
-                    <div class="text-center">
-                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="<?= BASE_URL ?>assets/admin/img/undraw_posting_photo.svg" alt="...">
-                    </div>
-                    <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                        constantly updated collection of beautiful svg images that you can use
-                        completely free and without attribution!</p>
-                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                        unDraw &rarr;</a>
-                </div>
-            </div>
-
-            <!-- Approach -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                </div>
-                <div class="card-body">
-                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                        custom components and custom utility classes.</p>
-                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                        Bootstrap framework, especially the utility classes.</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</div>
+</html>

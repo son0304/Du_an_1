@@ -12,6 +12,7 @@ require_once '../Auth/authMiddleware.php';
 <?php require_once '../../Layout/Admin/head.php' ?>
 
 <body>
+
 </body>
 </html> 
 <body id="page-top">

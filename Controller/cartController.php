@@ -18,10 +18,11 @@ class CartController
     }
     public function viewCart()
     {
-        if(!isset($_SESSION['user'])) {
+        if (!isset($_SESSION['user'])) {
             header("Location: ../Auth/404.php");
             exit;
         }
+
         $id_user = $_SESSION['user']['id'];
         $id_cart = $this->cartModel->getCartByIdUser($id_user)['id'];
         $carts = $this->cartModel->viewCartModel($id_user);
@@ -30,6 +31,11 @@ class CartController
     }
     public function addToCart()
     {
+
+        if (!isset($_SESSION['user'])) {
+            header("Location: ../Auth/404.php");
+            exit;
+        }
         $id_product = $_GET['id'] ?? null;
         $size_name = $_GET['size'] ?? null;
         $id_user = $_SESSION['user']['id'];
@@ -50,7 +56,6 @@ class CartController
                     $this->cartModel->updateCartItem($existingItem['id'], $newQuantity, $price);
                 } else {
                     $this->cartModel->addToCartModel($id_user, $id_cart, $id_product, $id_size, $quantity, $price);
-                    
                 }
 
                 header("Location: /Du_an_1/View/Client/index.php?action=viewCart");

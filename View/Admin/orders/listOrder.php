@@ -1,11 +1,32 @@
-<div class="py-5">
-    <h2 class="text-primary mb-4 text-center">Danh sách đơn hàng (Admin)</h2>
+<div class="pb-5">
+    <h2 class="text-primary mb-4 text-center">Danh sách đơn hàng</h2>
+    <div class="border rounded my-4 p-3 bg-white shadow-sm">
 
+        <!-- Form tìm kiếm -->
+        <form method="post" action="" class="d-flex flex-wrap justify-content-center align-items-center pt-3 gap-3">
+
+            <input type="text" name="search" class="form-control w-50" placeholder="Nhập mã đơn hoặc tên người nhận"
+                value="<?= htmlspecialchars($_POST['search'] ?? '') ?>">
+
+            <select name="status" class="form-select w-auto">
+                <option value="">-- Tất cả trạng thái --</option>
+                <option value="chờ xác nhận" <?= (($_POST['status'] ?? '') == 'chờ xác nhận') ? 'selected' : '' ?>>🟥 Chờ xác nhận</option>
+                <option value="đang xử lý" <?= (($_POST['status'] ?? '') == 'đang xử lý') ? 'selected' : '' ?>>🟨 Đang xử lý</option>
+                <option value="đang giao" <?= (($_POST['status'] ?? '') == 'đang giao') ? 'selected' : '' ?>>🟦 Đang giao</option>
+                <option value="hoàn tất" <?= (($_POST['status'] ?? '') == 'hoàn tất') ? 'selected' : '' ?>>🟩 Hoàn tất</option>
+                <option value="đã huỷ" <?= (($_POST['status'] ?? '') == 'đã huỷ') ? 'selected' : '' ?>>⬛ Đã huỷ</option>
+            </select>
+
+            <!-- Nút tìm kiếm -->
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </form>
+
+    </div>
     <?php if (!empty($orders)) : ?>
         <div class="rounded table-responsive">
             <table class="table">
                 <thead class="thead-light">
-                    <tr> 
+                    <tr>
                         <th scope="col">Mã Đơn</th>
                         <th scope="col">Khách hàng</th>
                         <th scope="col">Ngày nhận</th>
@@ -18,8 +39,7 @@
                 <tbody>
                     <?php foreach ($orders as $order): ?>
                         <?php
-                        // Xử lý trạng thái hiển thị màu sắc
-                        $statusClass = 'secondary';
+                        $statusClass = 'danger';
                         switch (strtolower($order['status'])) {
                             case 'đã giao':
                             case 'hoàn tất':
@@ -29,7 +49,7 @@
                                 $statusClass = 'warning';
                                 break;
                             case 'đã huỷ':
-                                $statusClass = 'danger';
+                                $statusClass = 'secondary';
                                 break;
                             case 'đang giao':
                                 $statusClass = 'info';
@@ -42,11 +62,12 @@
                             </td>
                             <td>
                                 <small><strong><?= ($order['name']) ?></strong><br>
-                                <?= ($order['phone']) ?></small>
+                                    <?= ($order['phone']) ?></small>
                             </td>
                             <td class="text-center">
-                                <small><?= ($order['received_time']) ?><br>
-                                <?= ($order['received_date']) ?></small>
+                                <?= ($order['received_date']) ?></small><br>
+                                <small><?= ($order['received_time']) ?>
+
                             </td>
                             <td class="text-center"><small><?= ($order['payment']) ?></small></td>
                             <td class="text-center">
@@ -69,18 +90,22 @@
     .badge.bg-success {
         background-color: #00C77F;
     }
+
     .badge.bg-warning {
         background-color: #ffc107;
     }
+
     .badge.bg-danger {
         background-color: #dc3545;
     }
+
     .badge.bg-info {
         background-color: #17a2b8;
     }
 
     /* Định dạng lại kích thước chữ nhỏ */
-    td small, th small {
+    td small,
+    th small {
         font-size: 0.85rem;
     }
 
@@ -98,7 +123,9 @@
     table {
         width: 100%;
     }
-    th, td {
+
+    th,
+    td {
         padding: 12px;
         text-align: center;
     }
