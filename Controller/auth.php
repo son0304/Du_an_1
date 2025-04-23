@@ -12,16 +12,16 @@ class AuthController
     public function login()
     {
         session_start();
-        $errors = [];
+        $errorsLogin = [];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = $_POST['name'];
             $password = $_POST['password'];
 
-            if (empty($name)) $errors['name'] = "Vui lòng nhập tên đăng nhập!";
-            if (empty($password)) $errors['password'] = "Vui lòng nhập mật khẩu!";
+            if (empty($name)) $errorsLogin['name'] = "Vui lòng nhập tên đăng nhập!";
+            if (empty($password)) $errorsLogin['password'] = "Vui lòng nhập mật khẩu!";
 
-            if (!$errors) {
+            if (!$errorsLogin) {
                 $user = $this->authModel->login($name, $password);
 
                 if ($user) {
@@ -36,18 +36,18 @@ class AuthController
                     header("Location: $redirect");
                     exit();
                 } else {
-                    $errors['login'] = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                    $errorsLogin['login'] = "Tên đăng nhập hoặc mật khẩu không đúng!";
                 }
             }
         }
 
-        return $errors;
+        return $errorsLogin;
     }
 
     public function register()
     {
         session_start();
-        $errors = [];
+        $errorsRegister = [];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = trim($_POST['name']);
@@ -57,33 +57,42 @@ class AuthController
             $address = trim($_POST['address']);
 
             // Validate từng trường
-            if (empty($name)) $errors['name'] = "Vui lòng nhập tên đăng nhập!";
-            if (empty($email)) $errors['email'] = "Vui lòng nhập email!";
-            elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors['email'] = "Email không đúng định dạng!";
-
-            if (empty($password)) $errors['password'] = "Vui lòng nhập mật khẩu!";
-            elseif (strlen($password) < 6) $errors['password'] = "Mật khẩu phải có ít nhất 6 ký tự!";
-
-            if (empty($phone)) $errors['phone'] = "Vui lòng nhập số điện thoại!";
-            elseif (!preg_match('/^(0|\+84)[3|5|7|8|9][0-9]{8}$/', $phone)) $errors['phone'] = "Số điện thoại không hợp lệ!";
-
-            if (empty($address)) $errors['address'] = "Vui lòng nhập địa chỉ!";
-
+            if (empty($name)) {
+                $errorsRegister['name'] = "Vui lòng nhập tên đăng nhập!";
+            }
+            if (empty($email)) {
+                $errorsRegister['email'] = "Vui lòng nhập email!";
+            } elseif ((!filter_var($email, FILTER_VALIDATE_EMAIL))) {
+                $errorsRegister['email'] = "Email không đúng định dạng!";
+            }
+            if (empty($password)) {
+                $errorsRegister['password'] = "Vui lòng nhập mật khẩu!";
+            } elseif ((strlen($password) < 6)) {
+                $errorsRegister['password'] = "Mật khẩu phải có ít nhất 6 ký tự!";
+            }
+            if (empty($phone)) {
+                $errorsRegister['phone'] = "Vui lòng nhập số điện thoại!";
+            } elseif ((!preg_match('/^(0|\+84)[3|5|7|8|9][0-9]{8}$/', $phone))) {
+                $errorsRegister['phone'] = "Số điện thoại không hợp lệ!";
+            }
+            if (empty($address)) {
+                $errorsRegister['address'] = "Vui lòng nhập địa chỉ!";
+            }
             if ($this->authModel->isNameExists($name)) {
-                $errors['name'] = "Tên người dùng đã tồn tại!";
+                $errorsRegister['name'] = "Tên người dùng đã tồn tại!";
             }
 
-            if (!$errors) {
+            if (!$errorsRegister) {
                 if ($this->authModel->register($name, $email, $password, $phone, $address)) {
                     header("Location: /Du_an_1/View/Auth/login.php");
                     exit();
                 } else {
-                    $errors['email'] = "Email đã tồn tại!";
+                    $errorsRegister['email'] = "Email đã tồn tại!";
                 }
             }
         }
-        
-        return $errors;
+
+        return $errorsRegister;
     }
 
     public function logout()

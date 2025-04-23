@@ -38,6 +38,18 @@ class AuthModel
                 $insertStmt->execute();
             }
 
+            $checkContactStmt = $this->conn->prepare('SELECT id FROM contacts WHERE id_user = ?');
+            $checkContactStmt->bind_param('i', $user['id']);
+            $checkContactStmt->execute();
+            $checkContactResult = $checkContactStmt->get_result();
+
+            if ($checkContactResult->num_rows === 0) {
+                
+                $insertContactStmt = $this->conn->prepare('INSERT INTO contacts (id_user) VALUES (?)');
+                $insertContactStmt->bind_param('i', $user['id']);
+                $insertContactStmt->execute();
+            }
+
             return $user;
         } else {
             return false;

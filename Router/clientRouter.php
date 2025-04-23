@@ -3,11 +3,13 @@ require_once __DIR__ . '/../Config/config.php';
 require_once __DIR__ . '/../Controller/productController.php';
 require_once __DIR__ . '/../Controller/orderController.php';
 require_once __DIR__ . '/../Controller/cartController.php';
+require_once __DIR__ . '/../Controller/contactController.php';
 
 $action = $_GET['action'] ?? 'home';
 $controllerProduct = new ProductController($conn);
 $controllerOrder = new OrderController($conn);
 $controllerCart = new CartController($conn);
+$controllerContact = new ContactController($conn);
 
 switch ($action) {
 
@@ -40,7 +42,7 @@ switch ($action) {
         require_once '../../View/Client/home/home.php';
         break;
     case 'contact':
-        require_once '../../View/Client/contacts/contact.php';
+        $controllerContact->addContact();
         break;
 
     default:
