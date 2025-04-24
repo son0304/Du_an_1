@@ -80,7 +80,7 @@ $categories = $productModel->getCategories();
                             data-sizes='<?= json_encode($sizes) ?>'>
                         <div class="card-body flex-grow-1 d-flex flex-column">
                             <h5 class="card-title fw-bold"><?= htmlspecialchars($product_info['product_name']); ?></h5>
-                            <p class="card-text"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></p>
+                            <p class="card-text d-none"><?= nl2br(htmlspecialchars($product_info['product_description'])); ?></p>
                             <div class="mt-auto">
                                 <p class="fw-bold text-danger mb-2">Giá:
                                     <span id="price-<?= $product_id; ?>">
@@ -375,7 +375,7 @@ $categories = $productModel->getCategories();
                 <p>
                     🎂 Hãy để chúng tôi đồng hành cùng bạn tạo nên <strong>những khoảnh khắc ngọt ngào và đáng nhớ</strong>.
                 </p>
-                <a href="?act=contact" class="btn btn-outline-primary mt-3">📞 Liên hệ để thiết kế bánh của riêng bạn</a>
+                <a href="?action=contact" class="btn btn-outline-primary mt-3">📞 Liên hệ để thiết kế bánh của riêng bạn</a>
             </div>
         </div>
     </div>
