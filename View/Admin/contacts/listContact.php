@@ -15,11 +15,18 @@
                         <strong><?= $contact['fullname']; ?></strong>
                     </div>
                 </a>
-                <a href="?action=deleteContact&id=<?= $contact['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">
-                    <button type="submit" class="btn btn-sm text-danger bg-transparent border-0">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </a>
+                <?php
+                $status = $contact['status'];
+                $badgeClass = 'badge bg-secondary';
+                if ($status === 'Chờ xác nhận') {
+                    $badgeClass = 'badge bg-warning text-dark';
+                } elseif ($status === 'Đã xác nhận') {
+                    $badgeClass = 'badge bg-success';
+                }
+                ?>
+                <span class="<?= $badgeClass ?>" style="font-size: 0.85rem;">
+                    <?= $status ?>
+                </span>
             </div>
         <?php endforeach; ?>
     </div>

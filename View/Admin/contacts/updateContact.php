@@ -13,11 +13,27 @@
                 <?= $_SESSION['user']['role'] ? 'member' : null ?>
             </span>
         </div>
+        
+        <div class="ms-auto">
+            <?php
+            $status = $contacts['status'];
+            $badgeClass = 'badge bg-secondary';
+            if ($status === 'Chờ xác nhận') {
+                $badgeClass = 'badge bg-warning text-dark';
+            } elseif ($status === 'Đã xác nhận') {
+                $badgeClass = 'badge bg-success';
+            }
+            ?>
+            <span class="<?= $badgeClass ?>" style="font-size: 0.85rem;">
+                <?= $status ?>
+            </span>
+        </div>
     </div>
 
     <?php if (($contacts['status'] ?? '') !== 'Đã xác nhận'): ?>
         <div class="mb-4">
             <form action="" method="post">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($contacts['id']) ?>">
                 <button type="submit" name="status" value="Đã xác nhận" class="btn btn-success">
                     Xác nhận
                 </button>

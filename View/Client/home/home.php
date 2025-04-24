@@ -375,7 +375,7 @@ $categories = $productModel->getCategories();
                 <p>
                     🎂 Hãy để chúng tôi đồng hành cùng bạn tạo nên <strong>những khoảnh khắc ngọt ngào và đáng nhớ</strong>.
                 </p>
-                <a href="?act=contact" class="btn btn-outline-primary mt-3">📞 Liên hệ để thiết kế bánh của riêng bạn</a>
+                <a href="?action=contact" class="btn btn-outline-primary mt-3">📞 Liên hệ để thiết kế bánh của riêng bạn</a>
             </div>
         </div>
     </div>
