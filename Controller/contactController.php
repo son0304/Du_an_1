@@ -19,41 +19,61 @@ class ContactController
 
     public function addContact()
     {
-        $id_user = $_SESSION['user']['id'];
-        $id_contact = $this->contactModel->getContactByIdUser($id_user)['id'];
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $fullname = $_POST['fullname'];
-            $email = $_POST['email'];
-            $phone = $_POST['phone'];
-            $title = $_POST['title'];
-            $description = $_POST['description'];
-            $status = 'Chờ xác nhận';
+        // Hiển thị form contact (GET hoặc lần đầu truy cập)
+        if ($_SERVER["REQUEST_METHOD"] != "POST") {
+            include_once __DIR__ . '/../View/Client/contacts/contact.php';
+            return;
+        }
 
-            $this->contactModel->addContact($id_user, $id_contact, $fullname, $email, $phone, $title, $description, $status);
-
-            header("Location: /Du_an_1/View/Client/index.php?action=contact");
+        // Người dùng bấm GỬI => kiểm tra đăng nhập
+        if (!isset($_SESSION['user'])) {
+            // Nếu chưa đăng nhập, chuyển sang trang đăng nhập
+            header("Location: /Du_an_1/View/Auth/login.php");
             exit();
         }
 
-        include_once __DIR__ . '/../View/Client/contacts/contact.php';
+        // Đã đăng nhập thì xử lý thêm contact
+        $id_user = $_SESSION['user']['id'];
+        $contact = $this->contactModel->getContactByIdUser($id_user);
+        $id_contact = $contact['id'] ?? null;
+
+        // Lấy dữ liệu từ form
+        $fullname = $_POST['fullname'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $title = $_POST['title'];
+        $description = $_POST['description'];
+        $status = 'Chờ xác nhận';
+
+        // Thêm contact
+        $this->contactModel->addContact($id_user, $id_contact, $fullname, $email, $phone, $title, $description, $status);
+
+        // Chuyển hướng sau khi gửi thành công
+        header("Location: /Du_an_1/View/Client/index.php?action=contact");
+        exit();
     }
+
 
     public function updateContactStatus()
     {
-        $id = $_GET['id'] ?? null;
+        $id = $_GET['id'] ?? $_POST['id'] ?? null;
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && $id) {
             $status = $_POST['status'];
-
             $result = $this->contactModel->updateContactStatus($id, $status);
         }
-        if (isset($id)) {
-            // $id = $_GET['id'];
+
+        if ($id) {
             $contacts = $this->contactModel->getContactById($id);
         }
+
         include_once __DIR__ . '/../View/Admin/contacts/updateContact.php';
     }
+
 
     public function deleteContact()
     {

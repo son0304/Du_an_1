@@ -44,8 +44,8 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <form action="" method="post">
-                                <div class="row g-3"> <!-- thêm spacing gọn gàng hơn -->
+                            <form action="" method="post" id="contactForm">
+                                <div class="row g-3">
                                     <div class="col-lg-6">
                                         <fieldset>
                                             <input type="text" name="fullname" placeholder="Họ và tên" autocomplete="on" required class="form-control">
@@ -80,13 +80,20 @@
                                     </div>
                                     <div class="col-lg-12 d-flex justify-content-center">
                                         <fieldset class="m-0">
-                                            <button
-                                                type="submit"
-                                                id="form-submit"
-                                                class="btn btn-warning text-white px-4 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center"
-                                                style="min-width: 200px; font-size: 16px; font-weight: 500;">
-                                                <span style="display: inline-block; transform: translateY(1px);">✉️</span>&nbsp;Gửi tin nhắn
-                                            </button>
+                                            <?php if (isset($_SESSION['user'])): ?>
+                                                <button
+                                                    type="submit"
+                                                    id="form-submit"
+                                                    class="btn btn-warning text-white px-4 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center"
+                                                    style="min-width: 200px; font-size: 16px; font-weight: 500;">
+                                                    <span style="display: inline-block; transform: translateY(1px);">✉️</span>&nbsp;Gửi tin nhắn
+                                                </button>
+                                            <?php else: ?>
+                                                <a href="../Auth/login.php" class="btn btn-warning text-white px-4 py-2 rounded-pill shadow-sm d-flex align-items-center justify-content-center"
+                                                    style="min-width: 200px; font-size: 16px; font-weight: 500; text-decoration: none;">
+                                                    <span style="display: inline-block; transform: translateY(1px);">🔒</span>&nbsp;Vui lòng đăng nhập
+                                                </a>
+                                            <?php endif; ?>
                                         </fieldset>
                                     </div>
 
@@ -100,6 +107,56 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contactForm');
+
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            let message = "";
+
+            const fullName = form.fullname.value.trim();
+            const phone = form.phone.value.trim();
+            const email = form.email.value.trim();
+            const title = form.title.value;
+            const description = form.description.value.trim();
+
+            const phoneRegex = /^[0-9]{9,11}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (fullName === "") {
+                isValid = false;
+                message += "• Vui lòng nhập họ tên.\n";
+            }
+
+            if (!phoneRegex.test(phone)) {
+                isValid = false;
+                message += "• Số điện thoại không hợp lệ (9-11 chữ số).\n";
+            }
+
+            if (!emailRegex.test(email)) {
+                isValid = false;
+                message += "• Email không đúng định dạng.\n";
+            }
+
+            if (!title) {
+                isValid = false;
+                message += "• Vui lòng chọn chủ đề liên hệ.\n";
+            }
+
+            if (description.length < 10) {
+                isValid = false;
+                message += "• Nội dung tin nhắn quá ngắn (tối thiểu 10 ký tự).\n";
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                alert("Vui lòng kiểm tra lại:\n" + message);
+            }
+        });
+    });
+</script>
 
 
 <!-- Scripts -->

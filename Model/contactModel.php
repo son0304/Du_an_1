@@ -40,7 +40,7 @@ class ContactModel
 
     public function updateContactStatus($id, $status)
     {
-        $sql = "UPDATE contact_items SET status = ? WHERE id_contact = ?";
+        $sql = "UPDATE contact_items SET status = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("si", $status, $id);
         return $stmt->execute();
