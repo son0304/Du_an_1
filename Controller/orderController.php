@@ -51,12 +51,31 @@ class OrderController
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_status'])) {
-            $newStatus = $_POST['new_status'];
-            $this->orderModel->updateStatusOrderModel($id_order, $newStatus);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['new_status'])) {
+                $newStatus = $_POST['new_status'];
+                $this->orderModel->updateStatusOrderModel($id_order, $newStatus);
+                $_SESSION['message'] = "Cập nhật trạng thái đơn hàng thành công.";
+                $_SESSION['type'] = 'success';
+            } else if (isset($_POST['update_order'])) {
+                $name = $_POST['name'] ?? '';
+                $phone = $_POST['phone'] ?? '';
+                $address = $_POST['address'] ?? '';
+                $date = $_POST['received_date'] ?? '';
+                $time = $_POST['received_time'] ?? '';
+                $payment = $_POST['payment'] ?? '';
 
-            $_SESSION['message'] = "Cập nhật trạng thái đơn hàng thành công.";
-            $_SESSION['type'] = 'success';
+                // Kiểm tra trạng thái đơn hàng
+                $order = $this->orderModel->getOrderById($id_order);
+                if ($order[0]['status'] === 'hoàn tất' || $order[0]['status'] === 'đã huỷ') {
+                    $_SESSION['message'] = 'Không thể chỉnh sửa thông tin đơn hàng đã hoàn tất hoặc đã huỷ';
+                    $_SESSION['type'] = 'error';
+                } else {
+                    $this->orderModel->updateOrderModel($id_order, $name, $phone, $address, $date, $time, $payment);
+                    $_SESSION['message'] = "Cập nhật thông tin khách hàng thành công";
+                    $_SESSION['type'] = 'success';
+                }
+            }
 
             header("Location: dashboard.php?action=detailOrder&id=" . $id_order);
             exit;
@@ -150,20 +169,19 @@ class OrderController
             $id_size = $this->sizeModel->getSizeId($size_name);
             $price = $this->sizeModel->getProductPrice($id_product, $size_name);
 
-            $product['quantity'] = (int)($_POST['quantity'] ?? 1);
+            $product['quantity'] = (int)($_POST['quantity'][$id_product] ?? 1);
             $product['price'] = $price;
             $product['id_size'] = $id_size;
 
             $products[] = $product;
-        } else {
+        } else if ($id_cart) {
             foreach ($cart_items as $item) {
-                $product_info = $this->productModel->getProductByCart($item['id_product']);
-                if (is_array($product_info) && count($product_info) > 0) {
-                    $cart_product = $product_info[0];
-                    $cart_product['quantity'] = $item['quantity'];
-                    $cart_product['price'] = $item['price'];
-                    $cart_product['id_size'] = $item['id_size'];
-                    $products[] = $cart_product;
+                $product_info = $this->productModel->getProductById($item['id_product']);
+                if ($product_info) {
+                    $product_info['quantity'] = $item['quantity'];
+                    $product_info['price'] = $item['price'];
+                    $product_info['id_size'] = $item['id_size'];
+                    $products[] = $product_info;
                 }
             }
         }
@@ -190,7 +208,7 @@ class OrderController
                 $cart_item = [];
 
                 if ($id_product) {
-                    $quantity = (int)($_POST['quantity'] ?? 1);
+                    $quantity = (int)($_POST['quantity'][$id_product] ?? 1);
                     $id_size = $this->sizeModel->getSizeId($size_name);
                     if (!$price || !$id_size) {
                         $_SESSION['message'] = "Không lấy được thông tin sản phẩm";
@@ -231,7 +249,7 @@ class OrderController
                 }
             }
         } catch (Exception $e) {
-            $_SESSION['message'] = "Thêm mới đơn hàng thất bại";
+            $_SESSION['message'] = "Có lỗi xảy ra: " . $e->getMessage();
             $_SESSION['type'] = 'error';
         }
 

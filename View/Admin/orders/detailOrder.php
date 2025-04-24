@@ -89,16 +89,69 @@ unset($_SESSION['message'], $_SESSION['type']);
 
         <!-- Thông tin người nhận -->
         <div class="card mb-4 shadow-sm border-0">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <strong>Thông tin người nhận</strong>
+                <?php if ($statusText !== 'hoàn tất' && $statusText !== 'đã huỷ'): ?>
+                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editCustomerModal">
+                        <i class="fas fa-edit"></i> Chỉnh sửa
+                    </button>
+                <?php endif; ?>
             </div>
             <div class="card-body bg-light">
                 <div class="row">
-                    <div class="col-md-6 mb-2"><strong>Họ tên:</strong> <?= $order['customer_name'] ?></div>
-                    <div class="col-md-6 mb-2"><strong>Điện thoại:</strong> <?= $order['phone'] ?></div>
-                    <div class="col-md-6 mb-2"><strong>Địa chỉ:</strong> <?= $order['address'] ?></div>
+                    <div class="col-md-6 mb-2"><strong>Họ tên:</strong> <span id="customerName"><?= $order['customer_name'] ?></span></div>
+                    <div class="col-md-6 mb-2"><strong>Điện thoại:</strong> <span id="customerPhone"><?= $order['phone'] ?></span></div>
+                    <div class="col-md-6 mb-2"><strong>Địa chỉ:</strong> <span id="customerAddress"><?= $order['address'] ?></span></div>
                     <div class="col-md-6 mb-2"><strong>Ngày nhận:</strong> <?= $order['received_date'] ?> lúc <?= $order['received_time'] ?></div>
                     <div class="col-md-6 mb-2"><strong>Hình thức thanh toán:</strong> <?= $order['payment'] ?></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal chỉnh sửa thông tin khách hàng -->
+        <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCustomerModalLabel">Chỉnh sửa thông tin khách hàng</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post" action="">
+                        <div class="modal-body">
+                            <input type="hidden" name="id_order" value="<?= $order['id_order'] ?>">
+                            <div class="mb-3">
+                                <label for="editCustomerName" class="form-label">Họ tên</label>
+                                <input type="text" class="form-control" id="editCustomerName" name="name" value="<?= $order['customer_name'] ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCustomerPhone" class="form-label">Điện thoại</label>
+                                <input type="tel" class="form-control" id="editCustomerPhone" name="phone" value="<?= $order['phone'] ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCustomerAddress" class="form-label">Địa chỉ</label>
+                                <textarea class="form-control" id="editCustomerAddress" name="address" rows="3" required><?= $order['address'] ?></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editReceivedDate" class="form-label">Ngày nhận</label>
+                                <input type="date" class="form-control" id="editReceivedDate" name="received_date" value="<?= $order['received_date'] ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editReceivedTime" class="form-label">Giờ nhận</label>
+                                <input type="time" class="form-control" id="editReceivedTime" name="received_time" value="<?= $order['received_time'] ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editPayment" class="form-label">Hình thức thanh toán</label>
+                                <select class="form-select" id="editPayment" name="payment" required>
+                                    <option value="Tiền mặt" <?= $order['payment'] === 'Tiền mặt' ? 'selected' : '' ?>>Tiền mặt</option>
+                                    <option value="Chuyển khoản" <?= $order['payment'] === 'Chuyển khoản' ? 'selected' : '' ?>>Chuyển khoản</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" name="update_order" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

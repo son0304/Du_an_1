@@ -16,7 +16,7 @@
                 <div class="col-lg-8">
                     <div class="card p-4">
                         <h4 class="text-center text-primary mb-4">Thông tin sản phẩm</h4>
-                        <?php foreach ($products as $product) : 
+                        <?php foreach ($products as $index => $product) :
                             $quantity = isset($_GET['id_cart']) ? $product['quantity'] : 1;
                             $price = $product['price'];
                         ?>
@@ -29,7 +29,15 @@
                                     <p class="text-danger fw-bold mb-2">Giá: <?= number_format($price, 0, ',', '.') ?> ₫</p>
                                     <div>
                                         <label for="quantity_<?= $product['id'] ?>" class="form-label">Số lượng</label>
-                                        <input type="number" name="quantity[]" id="quantity_<?= $product['id'] ?>" class="form-control form-control-sm w-50 quantity-input" min="1" value="<?= $quantity ?>" data-price="<?= $price ?>">
+                                        <input type="number"
+                                            name="quantity[<?= $product['id'] ?>]"
+                                            id="quantity_<?= $product['id'] ?>"
+                                            class="form-control form-control-sm w-50 quantity-input"
+                                            min="1"
+                                            value="<?= $quantity ?>"
+                                            data-price="<?= $price ?>"
+                                            data-id="<?= $product['id'] ?>"
+                                            required>
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +104,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <strong class="text-danger">Tổng tiền: <span id="totalPriceText">0</span> VND</strong>
+                            <strong class="text-danger">Tổng tiền: <span id="totalPriceText">0</span> ₫</strong>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
@@ -119,80 +127,33 @@
             document.getElementById('totalPriceText').textContent = total.toLocaleString('vi-VN');
         }
 
-        // Hiển thị thông tin chuyển khoản nếu chọn BANK
-        function toggleBankInfo() {
-            document.getElementById('bankInfo').classList.toggle('d-none', !document.getElementById('bank').checked);
-        }
+        // Thêm sự kiện khi thay đổi số lượng
+        document.querySelectorAll('.quantity-input').forEach(input => {
+            input.addEventListener('input', updateTotalPrice);
+            input.addEventListener('change', updateTotalPrice);
+        });
 
-        // Kiểm tra số điện thoại
-        function validatePhone(phone) {
-            return /^(0[3|5|7|8|9])\d{8}$/.test(phone);
-        }
+        // Cập nhật tổng tiền khi load trang
+        document.addEventListener('DOMContentLoaded', updateTotalPrice);
 
-        // Kiểm tra ngày không phải quá khứ
-        function validateDate(date) {
-            const today = new Date();
-            const selected = new Date(date);
-            today.setHours(0, 0, 0, 0);
-            selected.setHours(0, 0, 0, 0);
-            return selected >= today;
-        }
+        // Validate form trước khi submit
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            const inputs = document.querySelectorAll('.quantity-input');
+            let isValid = true;
 
-        // Kiểm tra giờ đặt hợp lệ
-        function validateTime(time, dateStr) {
-            const [h, m] = time.split(':');
-            const now = new Date();
-            const selectedTime = new Date(`${dateStr}T${h}:${m}`);
-            const selectedHour = selectedTime.getHours();
-            if (selectedHour < 8 || selectedHour >= 21) return false;
-            if (dateStr === now.toISOString().split('T')[0]) {
-                return selectedTime.getTime() >= now.getTime() + 3600000;
-            }
-            return true;
-        }
-
-        // Sự kiện DOM
-        document.addEventListener('DOMContentLoaded', () => {
-            updateTotalPrice();
-            toggleBankInfo();
-
-            document.querySelectorAll('.quantity-input').forEach(input =>
-                input.addEventListener('input', updateTotalPrice)
-            );
-
-            document.querySelectorAll('[name="payment"]').forEach(radio =>
-                radio.addEventListener('change', toggleBankInfo)
-            );
-
-            document.getElementById('orderForm').addEventListener('submit', (e) => {
-                let valid = true;
-
-                const phone = document.getElementById('phone').value;
-                if (!validatePhone(phone)) {
-                    document.getElementById('phoneError').classList.remove('d-none');
-                    valid = false;
+            inputs.forEach(input => {
+                if (parseInt(input.value) < 1) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
                 } else {
-                    document.getElementById('phoneError').classList.add('d-none');
+                    input.classList.remove('is-invalid');
                 }
-
-                const date = document.getElementById('received_date').value;
-                if (!validateDate(date)) {
-                    document.getElementById('dateError').classList.remove('d-none');
-                    valid = false;
-                } else {
-                    document.getElementById('dateError').classList.add('d-none');
-                }
-
-                const time = document.getElementById('received_time').value;
-                if (!validateTime(time, date)) {
-                    document.getElementById('timeError').classList.remove('d-none');
-                    valid = false;
-                } else {
-                    document.getElementById('timeError').classList.add('d-none');
-                }
-
-                if (!valid) e.preventDefault();
             });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Vui lòng nhập số lượng hợp lệ (lớn hơn 0)');
+            }
         });
     </script>
 
@@ -208,8 +169,12 @@
                 timer: 3000,
                 showConfirmButton: true,
                 timerProgressBar: true,
-                showClass: { popup: 'animate__animated animate__fadeInDown' },
-                hideClass: { popup: 'animate__animated animate__fadeOutUp' }
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
             });
         </script>
     <?php endif; ?>

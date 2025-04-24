@@ -59,7 +59,7 @@ class StatisticModel
                 MONTH(received_date) AS month,
                 DAY(received_date) AS day,
                 COUNT(*) AS total_orders,
-                SUM(total_price) AS total_price
+                SUM(total_price) AS revenue
             FROM orders 
             WHERE DATE(received_date) = ? AND status = ? 
             GROUP BY YEAR(received_date), MONTH(received_date), DAY(received_date)
@@ -68,7 +68,8 @@ class StatisticModel
         $stmt->bind_param("ss", $date, $status);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $row = $result->fetch_assoc();
+        return $row ?: ['revenue' => 0, 'total_orders' => 0];
     }
 
 
@@ -79,7 +80,7 @@ class StatisticModel
                 YEAR(received_date) AS year, 
                 WEEK(received_date, 1) AS week, 
                 COUNT(*) AS total_orders,
-                SUM(total_price) AS total_price
+                SUM(total_price) AS revenue
             FROM orders 
             WHERE YEARWEEK(received_date, 1) = YEARWEEK(?, 1) 
             AND status = ?
@@ -90,7 +91,8 @@ class StatisticModel
         $stmt->bind_param("ss", $date, $status);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $row = $result->fetch_assoc();
+        return $row ?: ['revenue' => 0, 'total_orders' => 0];
     }
 
     // Hàm thống kê theo tháng với tham số $status và $date
@@ -100,34 +102,55 @@ class StatisticModel
                 YEAR(received_date) AS year, 
                 MONTH(received_date) AS month, 
                 COUNT(*) AS total_orders,
-                SUM(total_price) AS total_price
+                SUM(total_price) AS revenue
             FROM orders 
-            WHERE YEAR(received_date) = YEAR(?) AND MONTH(received_date) = MONTH(?) AND status = ?
+            WHERE DATE_FORMAT(received_date, '%Y-%m') = ? AND status = ?
             GROUP BY YEAR(received_date), MONTH(received_date)
             ORDER BY year DESC, month DESC";
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sss", $date, $date, $status);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    // Hàm thống kê theo năm với tham số $status và $date
-    public function getStatisticByYear($date, $status)
-    {
-        $sql = "SELECT 
-                YEAR(received_date) AS year, 
-                COUNT(*) AS total_orders,
-                SUM(total_price) AS total_price
-            FROM orders 
-            WHERE YEAR(received_date) = YEAR(?) AND status = ?
-            GROUP BY YEAR(received_date)
-            ORDER BY year DESC";
-
+        $date = date('Y-m', strtotime($date));
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $date, $status);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $row = $result->fetch_assoc();
+        return $row ?: ['revenue' => 0, 'total_orders' => 0];
+    }
+    // Hàm thống kê theo năm với tham số $status và $date
+    public function getStatisticByYear($date, $status)
+    {
+        $year = (int)date('Y', strtotime($date));
+        $sql = "SELECT 
+                YEAR(received_date) AS year,
+                COUNT(*) AS total_orders,
+                COALESCE(SUM(total_price), 0) AS revenue
+            FROM orders 
+            WHERE YEAR(received_date) = ? AND status = ?
+            GROUP BY YEAR(received_date)";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("is", $year, $status);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        // Debug thông tin
+        error_log("Year: " . $year);
+        error_log("SQL Query: " . $sql);
+        error_log("Row data: " . print_r($row, true));
+
+        if ($row) {
+            return [
+                'year' => $row['year'],
+                'total_orders' => $row['total_orders'],
+                'revenue' => $row['revenue']
+            ];
+        }
+
+        return [
+            'year' => $year,
+            'total_orders' => 0,
+            'revenue' => 0
+        ];
     }
 }
