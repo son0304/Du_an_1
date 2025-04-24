@@ -15,36 +15,68 @@ class StatisticController
     {
         $status = 'hoàn tất';
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        echo $date;
         $currentDate = new DateTime($date);
 
-        // Ngày hôm trước
-        $previousDay = $currentDate->modify('-1 day')->format('Y-m-d');
-        $currentDate->modify('+1 day'); // reset lại về ngày gốc
+        // Lấy dữ liệu cho 7 ngày gần nhất
+        $statByDay = [];
+        $statByDayPrevious = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $statDate = clone $currentDate;
+            $statDate->modify("-$i day");
+            $stat = $this->statisticModel->getStatisticByDay($statDate->format('Y-m-d'), $status);
+            $statByDay[] = $stat;
+            if ($i == 1) {
+                $statByDayPrevious = $stat;
+            }
+        }
 
-        // Tuần trước
-        $previousWeek = $currentDate->modify('-1 week')->format('Y-m-d');
-        $currentDate->modify('+1 week'); // reset
+        // Lấy dữ liệu cho 4 tuần gần nhất
+        $statByWeek = [];
+        $statByWeekPrevious = [];
+        for ($i = 3; $i >= 0; $i--) {
+            $statDate = clone $currentDate;
+            $statDate->modify("-$i week");
+            $stat = $this->statisticModel->getStatisticByWeek($statDate->format('Y-m-d'), $status);
+            $statByWeek[] = $stat;
+            if ($i == 1) {
+                $statByWeekPrevious = $stat;
+            }
+        }
 
-        // Tháng trước
-        $previousMonth = $currentDate->modify('-1 month')->format('Y-m-d');
-        $currentDate->modify('+1 month');
+        // Lấy dữ liệu cho 6 tháng gần nhất
+        $statByMonth = [];
+        $statByMonthPrevious = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $statDate = clone $currentDate;
+            $statDate->modify("-$i month");
+            $stat = $this->statisticModel->getStatisticByMonth($statDate->format('Y-m'), $status);
+            $statByMonth[] = $stat;
+            if ($i == 1) {
+                $statByMonthPrevious = $stat;
+            }
+        }
 
-        // Năm trước
-        $previousYear = $currentDate->modify('-1 year')->format('Y-m-d');
+        // Lấy dữ liệu cho 2 năm gần nhất
+        $statByYear = [];
+        $statByYearPrevious = [];
 
-        // Thống kê cho các ngày trước
-        $statByDay = $this->statisticModel->getStatisticByDay($date, $status);
-        $statByDayPrevious = $this->statisticModel->getStatisticByDay($previousDay, $status);
+        // Lấy năm hiện tại
+        $currentYear = $currentDate->format('Y');
+        $stat = $this->statisticModel->getStatisticByYear($currentYear . '-01-01', $status);
+        if ($stat['revenue'] > 0) {
+            $statByYear[] = $stat;
+        }
 
-        $statByWeek = $this->statisticModel->getStatisticByWeek($date, $status);
-        $statByWeekPrevious = $this->statisticModel->getStatisticByWeek($previousWeek, $status);
+        // Lấy năm trước
+        $previousYear = (int)$currentYear - 1;
+        $stat = $this->statisticModel->getStatisticByYear($previousYear . '-01-01', $status);
+        if ($stat['revenue'] > 0) {
+            $statByYearPrevious = $stat;
+        }
 
-        $statByMonth = $this->statisticModel->getStatisticByMonth($date, $status);
-        $statByMonthPrevious = $this->statisticModel->getStatisticByMonth($previousMonth, $status);
-
-        $statByYear = $this->statisticModel->getStatisticByYear($date, $status);
-        $statByYearPrevious = $this->statisticModel->getStatisticByYear($previousYear, $status);
+        // Debug thông tin
+        error_log("Current Year Data: " . print_r($statByYear, true));
+        error_log("Previous Year Data: " . print_r($statByYearPrevious, true));
 
         // Gửi các dữ liệu sang View
         include_once __DIR__ . '/../View/Admin/masters/master.php';
